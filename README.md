@@ -1,13 +1,13 @@
 
 # TODO
 
--[] load data功能从utils/functional转移到dataset
--[] model分类分文件夹
--[] loss 从model分离
--[] visualize 从utils/functional剥离单独建立(?)
--[] evaluation 融入到系统中（+hook？第一步先变成函数）
--[] +FACT(SOTA方法之一)
--[] configs 分类
+- [ ] load data功能从utils/functional转移到dataset
+- [ ] model分类分文件夹
+- [ ] loss 从model分离
+- [ ] visualize 从utils/functional剥离单独建立(?)
+- [ ] evaluation 融入到系统中（+hook？第一步先变成函数）
+- [ ] +FACT(SOTA方法之一)
+- [ ] configs 分类
 
 ## 日志
 
