@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data
-from dataset.md_seq import MoDaSeq, paired_collate_fn
+from dataset.music_dance_dataset import MoDaSeq, paired_collate_fn
 
 from dataset.md_seq_ac import  MoDaSeqAC
 
@@ -694,10 +694,8 @@ def prepare_dataloader(music_data, dance_data, beat_data, batch_size, interval):
         modaac,
         num_workers=8,
         batch_size=batch_size,
-        # shuffle=True,
         sampler=sampler,
         pin_memory=True
-                # collate_fn=paired_collate_fn,
     )
 
     return data_loader

@@ -1,13 +1,19 @@
 
 # TODO
 
-- [ ] load data功能从utils/functional转移到dataset
-- [ ] model分类分文件夹
-- [ ] loss 从model分离
+- [x] load data功能从utils/functional转移到dataset
+- [x] model分类分文件夹
+- [ ] loss 从model分离 (考虑到vqvae commit loss无法分离，考虑把剩余的loss都移动到model里，可能下一步和train_step结合)
 - [ ] visualize 从utils/functional剥离单独建立(?)
 - [ ] evaluation 融入到系统中（+hook？第一步先变成函数）
 - [ ] +FACT(SOTA方法之一)
 - [ ] configs 分类
+
+## Benchmark
+
+| 方法  | FID_k $downarrow$ | FID_g $downarrow$ | DIV_k $uparrow$ | DIV_g $uparrow$  | BA $uparrow$ |
+| :--- | :----: | :----: | :----: | :----: | :----: |
+| Bailando | 28.16 | 9.62 | 7.83 | 6.34 | 0.2332 |
 
 ## 日志
 

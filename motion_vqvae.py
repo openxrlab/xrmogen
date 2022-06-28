@@ -11,7 +11,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data
-from dataset.motion_seq import MoSeq, paired_collate_fn
+from dataset.motion_seq import MoSeq
 # from models.vqvae import VQVAE
 
 from utils.log import Logger
@@ -26,8 +26,6 @@ import numpy as np
 import models
 import datetime
 warnings.filterwarnings('ignore')
-
-# a, b, c, d = check_data_distribution('/mnt/lustre/lisiyao1/dance/dance2/DanceRevolution/data/aistpp_train')
 
 import matplotlib.pyplot as plt
 
@@ -68,8 +66,7 @@ class MoQ():
             log.set_progress(epoch_i, len(training_data))
 
             for batch_i, batch in enumerate(training_data):
-                # LR Scheduler missing
-                # pose_seq = map(lambda x: x.to(self.device), batch)
+
                 trans = None
                 pose_seq = batch.to(self.device)
                 if config.rotmat:
@@ -248,29 +245,8 @@ class MoQ():
                 else:
                     quants = None
 
-                # # visualize motion
-                # mo_gt = torch.mean(torch.sqrt(torch.sum(diffgt ** 2, dim=3)), dim=2)[0].data.cpu().numpy()
-                # mo_evl = torch.mean(torch.sqrt(torch.sum(diffout ** 2, dim=3)), dim=2)[0].data.cpu().numpy()
-
-                # mo_gt2 = torch.mean(torch.sqrt(torch.sum(diffgt2 ** 2, dim=3)), dim=2)[0].data.cpu().numpy()
-                # mo_evl2 = torch.mean(torch.sqrt(torch.sum(diffout2 ** 2, dim=3)), dim=2)[0].data.cpu().numpy()
-
-
                 indexs = np.arange(t)
-                # plt.plot(indexs[:-1], mo_evl)
-                # plt.plot(indexs[:-1], mo_gt)
-                # if not os.path.exists(os.path.join(self.evaldir, 'videos', f"ep{epoch_tested:06d}")):
-                #     os.mkdir(os.path.join(self.evaldir, 'videos', f"ep{epoch_tested:06d}"))
-                # plt.savefig(os.path.join(self.evaldir, 'videos', f"ep{epoch_tested:06d}", self.dance_names[i_eval]+'.jpg'))
-                # plt.close()
 
-                # plt.plot(indexs[:-2], mo_evl2)
-                # plt.plot(indexs[:-2], mo_gt2)
-                # if not os.path.exists(os.path.join(self.evaldir, 'videos', f"ep{epoch_tested:06d}")):
-                #     os.mkdir(os.path.join(self.evaldir, 'videos', f"ep{epoch_tested:06d}"))
-                # plt.savefig(os.path.join(self.evaldir, 'videos', f"ep{epoch_tested:06d}", self.dance_names[i_eval]+'_dif2.jpg'))
-                # plt.close()
-                        # exit()
             print(tot_euclidean_error / (tot_eval_nums * 1.0))
             print('avg body len', tot_body_length / tot_eval_nums)
             print(torch.mean(torch.stack(euclidean_errors)), torch.std(torch.stack(euclidean_errors)))
@@ -310,20 +286,14 @@ class MoQ():
         random_id = 0  # np.random.randint(0, 1e4)
         
         for i_eval, batch_eval in enumerate(tqdm(self.training_data, desc='Generating Dance Poses')):
-            # Prepare data
-            # pose_seq_eval = map(lambda x: x.to(self.device), batch_eval)
+
             pose_seq_eval = batch_eval.to(self.device)
 
             quants = model.module.encode(pose_seq_eval)[0].cpu().data.numpy()
             all_quants = np.append(all_quants, quants.reshape(-1)) if all_quants is not None else quants.reshape(-1)
 
-        print(all_quants)
-                    # exit()
-        # visualizeAndWrite(results, config,self.gtdir, self.dance_names, 0)
         plt.hist(all_quants, bins=config.structure.l_bins, range=[0, config.structure.l_bins])
 
-        #图片的显示及存储
-        #plt.show()   #这个是图片显示
         log = datetime.datetime.now().strftime('%Y-%m-%d')
         plt.savefig(self.histdir1 + '/hist_epoch_' + str(epoch_tested)  + '_%s.jpg' % log)   #图片的存储
         plt.close()
@@ -377,11 +347,6 @@ class MoQ():
                     pose_sample = torch.cat([torch.zeros(pose_sample.size(0), pose_sample.size(1), 3).cuda(), pose_sample], dim=2)
                 quants['-'.join([str(jj) for jj in ii]) + '-rate' + str(config.sample_code_rate) ] = (zs[0].cpu().data.numpy()[0], zs[0].cpu().data.numpy()[0])
 
-                if False:
-                    global_vel = pose_sample[:, :, :3]
-                    pose_sample[:, 0, :3] = 0
-                    for iii in range(1, pose_sample.size(1)):
-                        pose_sample[:, iii, :3] = pose_sample[:, iii-1, :3] + global_vel[:, iii-1, :]
 
                 results.append(pose_sample)
 
@@ -565,22 +530,7 @@ class MoQ():
         if not os.path.exists(self.sampledir):
             os.mkdir(self.sampledir)
 
-        # self.ckptdir = os.path.join(self.expdir, "ckpt")
-        # if not os.path.exists(self.ckptdir):
-        #     os.mkdir(self.ckptdir)
 
-
-
-        
-# def prepare_dataloader(music_data, dance_data, batch_size):
-#     data_loader = torch.utils.data.DataLoader(
-#         MoSeq(dance_data),
-#         num_workers=8,
-#         batch_size=batch_size,
-#         shuffle=True,
-#         pin_memory=True
-#                 # collate_fn=paired_collate_fn,
-#     )
 def prepare_dataloader(music_data, dance_data, batch_size):
     modata = MoSeq(dance_data)
     sampler = torch.utils.data.RandomSampler(modata, replacement=True)
@@ -601,63 +551,6 @@ def prepare_dataloader(music_data, dance_data, batch_size):
 
 
 
-
-
-# def train_m2d(cfg):
-#     """ Main function """
-#     parser = argparse.ArgumentParser()
-
-#     parser.add_argument('--train_dir', type=str, default='data/train_1min',
-#                         help='the directory of dance data')
-#     parser.add_argument('--test_dir', type=str, default='data/test_1min',
-#                         help='the directory of music feature data')
-#     parser.add_argument('--data_type', type=str, default='2D',
-#                         help='the type of training data')
-#     parser.add_argument('--output_dir', metavar='PATH',
-#                         default='checkpoints/layers2_win100_schedule100_condition10_detach')
-
-#     parser.add_argument('--epoch', type=int, default=300000)
-#     parser.add_argument('--batch_size', type=int, default=16)
-#     parser.add_argument('--save_per_epochs', type=int, metavar='N', default=50)
-#     parser.add_argument('--log_per_updates', type=int, metavar='N', default=1,
-#                         help='log model loss per x updates (mini-batches).')
-#     parser.add_argument('--seed', type=int, default=1234,
-#                         help='random seed for data shuffling, dropout, etc.')
-#     parser.add_argument('--tensorboard', action='store_false')
-
-#     parser.add_argument('--d_frame_vec', type=int, default=438)
-#     parser.add_argument('--frame_emb_size', type=int, default=800)
-#     parser.add_argument('--d_pose_vec', type=int, default=24*3)
-#     parser.add_argument('--pose_emb_size', type=int, default=800)
-
-#     parser.add_argument('--d_inner', type=int, default=1024)
-#     parser.add_argument('--d_k', type=int, default=80)
-#     parser.add_argument('--d_v', type=int, default=80)
-#     parser.add_argument('--n_head', type=int, default=10)
-#     parser.add_argument('--n_layers', type=int, default=2)
-#     parser.add_argument('--lr', type=float, default=1e-4)
-#     parser.add_argument('--dropout', type=float, default=0.1)
-
-#     parser.add_argument('--seq_len', type=int, default=240)
-#     parser.add_argument('--max_seq_len', type=int, default=4500)
-#     parser.add_argument('--condition_step', type=int, default=10)
-#     parser.add_argument('--sliding_windown_size', type=int, default=100)
-#     parser.add_argument('--lambda_v', type=float, default=0.01)
-
-#     parser.add_argument('--cuda', type=str2bool, nargs='?', metavar='BOOL', const=True,
-#                         default=torch.cuda.is_available(),
-#                         help='whether to use GPU acceleration.')
-#     parser.add_argument('--aist', action='store_true', help='train on AIST++')
-#     parser.add_argument('--rotmat', action='store_true', help='train rotation matrix')
-
-#     args = parser.parse_args()
-#     args.d_model = args.frame_emb_size
-
-
-
-
-#     args_data = args.data
-#     args_structure = args.structure
 
 
 

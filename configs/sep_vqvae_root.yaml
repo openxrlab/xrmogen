@@ -17,11 +17,6 @@ structure:
         sample_length: 240
         use_bottleneck: True
         joint_channel: 3
-        # depth: 3
-        # width: 128
-        # m_conv: 1.0
-        # dilation_growth_rate: 1
-        # dilation_cycle: None
         vqvae_reverse_decoder_dilation: True
     down_half:
         levels: 1
@@ -39,11 +34,6 @@ structure:
         sample_length: 240
         use_bottleneck: True
         joint_channel: 3
-        # depth: 3
-        # width: 128
-        # m_conv: 1.0
-        # dilation_growth_rate: 1
-        # dilation_cycle: None
         acc: 1.0
         vqvae_reverse_decoder_dilation: True
     use_bottleneck: True
@@ -62,7 +52,7 @@ optimizer:
     schedular_kwargs:
         gamma: 0.1
         milestones: [100, 200]
-# schedular: []
+
 data:
     name: aist   
     train_dir: data/aistpp_train_wav
