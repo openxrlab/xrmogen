@@ -11,7 +11,7 @@
 
 ## Benchmark
 
-| 方法  | FID_k $downarrow$ | FID_g $downarrow$ | DIV_k $uparrow$ | DIV_g $uparrow$  | BA $uparrow$ |
+| 方法  | FID_k $\downarrow$ | FID_g $\downarrow$ | DIV_k $\uparrow$ | DIV_g $\uparrow$  | BA $\uparrow$ |
 | :--- | :----: | :----: | :----: | :----: | :----: |
 | Bailando | 28.16 | 9.62 | 7.83 | 6.34 | 0.2332 |
 
