@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data
-from dataset.music_dance_dataset import MoDaSeq, paired_collate_fn
+from dataset.music_dance_dataset import MusicDanceDataset
 
 from dataset.md_seq_ac import  MoDaSeqAC
 
@@ -63,7 +63,7 @@ class AC():
             ddm = True
         else:
             ddm = False
-        data = self.config.data
+        
         # criterion = nn.MSELoss()
         training_data = self.training_data
         test_loader = self.test_loader
@@ -295,30 +295,7 @@ class AC():
                         # block_size = gpt.module.get_block_size()
 
                         zs = gpt.module.sample(x, cond=music_seq)
-                        # jj = 0
-                        # for k in range(music_seq.size(1)):
-                        #     x_cond = x if x.size(1) <= block_size else x[:, -block_size:] # crop context if needed
-                        #     music_seq_input = music_seq[:, :k+1] if k < block_size else music_seq[:, k-block_size+1:k+1]
-                        #     # print(x_cond.size())
-                        #     # print(music_seq_input.size())
-                        #     logits, _ = gpt(x_cond, music_seq_input)
-                        #     # jj += 1
-                        #     # pluck the logits at the final step and scale by temperature
-                        #     logits = logits[:, -1, :]
-                        #     # optionally crop probabilities to only the top k options
-                        #     # if top_k is not None:
-                        #     #     logits = top_k_logits(logits, top_k)
-                        #     # apply softmax to convert to probabilities
-                        #     probs = F.softmax(logits, dim=-1)
-                        #     # sample from the distribution or take the most likely
-                        #     # if sample:
-                        #     #     ix = torch.multinomial(probs, num_samples=1)
-                        #     # else:
-                        #     _, ix = torch.topk(probs, k=1, dim=-1)
-                        #     # append to the sequence and continue
-                        #     x = torch.cat((x, ix), dim=1)
 
-                        # zs = [x]
                         pose_sample = vqvae.module.decode(zs)
 
                         if config.global_vel:
@@ -367,7 +344,7 @@ class AC():
             quants_out = {}
             for i_eval, batch_eval in enumerate(tqdm(self.test_loader, desc='Generating Dance Poses')):
                 # Prepare data
-                # pose_seq_eval = map(lambda x: x.to(self.device), batch_eval)
+                
                 if hasattr(config, 'demo') and config.demo:
                     music_seq = batch_eval.to(self.device)
                     quants = ([torch.ones(1, 1,).to(self.device).long() * 423], [torch.ones(1, 1,).to(self.device).long() * 12])
@@ -377,47 +354,20 @@ class AC():
                     pose_seq = pose_seq.to(self.device)
                 
                     quants = vqvae.module.encode(pose_seq)
-                # print(pose_seq.size())
+
                 if isinstance(quants, tuple):
                     x = tuple(quants[i][0][:, :1] for i in range(len(quants)))
                 else:
                     x = quants[0][:, :1]
-                # print(x.size())
-                # print(music_seq.size())
+
                 music_ds_rate = config.ds_rate if not hasattr(config, 'external_wav') else config.external_wav_rate
                 music_seq = music_seq[:, :, :config.structure_generate.n_music//music_ds_rate].contiguous().float()
                 b, t, c = music_seq.size()
                 music_seq = music_seq.view(b, t//music_ds_rate, c*music_ds_rate)
                 music_seq = music_seq[:, 1:]
-                # print(music_seq.size())
-
-                # block_size = gpt.module.get_block_size()
 
                 zs = gpt.module.sample(x, cond=music_seq)
-                # jj = 0
-                # for k in range(music_seq.size(1)):
-                #     x_cond = x if x.size(1) <= block_size else x[:, -block_size:] # crop context if needed
-                #     music_seq_input = music_seq[:, :k+1] if k < block_size else music_seq[:, k-block_size+1:k+1]
-                #     # print(x_cond.size())
-                #     # print(music_seq_input.size())
-                #     logits, _ = gpt(x_cond, music_seq_input)
-                #     # jj += 1
-                #     # pluck the logits at the final step and scale by temperature
-                #     logits = logits[:, -1, :]
-                #     # optionally crop probabilities to only the top k options
-                #     # if top_k is not None:
-                #     #     logits = top_k_logits(logits, top_k)
-                #     # apply softmax to convert to probabilities
-                #     probs = F.softmax(logits, dim=-1)
-                #     # sample from the distribution or take the most likely
-                #     # if sample:
-                #     #     ix = torch.multinomial(probs, num_samples=1)
-                #     # else:
-                #     _, ix = torch.topk(probs, k=1, dim=-1)
-                #     # append to the sequence and continue
-                #     x = torch.cat((x, ix), dim=1)
 
-                # zs = [x]
                 pose_sample = vqvae.module.decode(zs)
 
                 if config.global_vel:
@@ -443,7 +393,6 @@ class AC():
         
         for i_eval, batch_eval in enumerate(tqdm(self.test_loader, desc='Generating Dance Poses')):
             # Prepare data
-            # pose_seq_eval = map(lambda x: x.to(self.device), batch_eval)
             pose_seq_eval = batch_eval
 
             results.append(pose_seq_eval)
@@ -476,7 +425,7 @@ class AC():
 
         print(all_quants)
                     # exit()
-        # visualizeAndWrite(results, config,self.gtdir, self.dance_names, 0)
+
         plt.hist(all_quants, bins=config.structure.l_bins, range=[0, config.structure.l_bins])
 
         log = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -566,43 +515,18 @@ class AC():
 
     def _build_train_loader(self):
         self.training_data =None
-        # data = self.config.data
-        # if data.name == "aist":
-        #     print ("train with AIST++ dataset!")
-        #     train_music_data, train_dance_data, _ = load_data_aist(
-        #         data.train_dir, interval=data.seq_len, move=self.config.move if hasattr(self.config, 'move') else 64, rotmat=self.config.rotmat, external_wav=self.config.external_wav if hasattr(self.config, 'external_wav') else None, external_wav_rate=self.config.ds_rate//self.config.external_wav_rate if hasattr(self.config, 'external_wav_rate') else 1, music_normalize=self.config.music_normalize if hasattr(self.config, 'music_normalize') else False)
-        # else:
-        #     train_music_data, train_dance_data = load_data(
-        #         args_train.train_dir, 
-        #         interval=data.seq_len,
-        #         data_type=data.data_type)
-        # self.training_data = prepare_dataloader(train_music_data, train_dance_data, self.config.batch_size)
-
 
 
     def _build_test_loader(self):
         config = self.config
-        data = self.config.data
-        if data.name == "aist":
-            print ("test with AIST++ dataset!")
-            music_data, dance_data, dance_names = load_test_data_aist(
-                data.test_dir, move=config.move, rotmat=config.rotmat, external_wav=config.external_wav if hasattr(self.config, 'external_wav') else None, external_wav_rate=self.config.external_wav_rate if hasattr(self.config, 'external_wav_rate') else 1, music_normalize=self.config.music_normalize if hasattr(self.config, 'music_normalize') else False)
-        
-        else:    
-            music_data, dance_data, dance_names = load_test_data(
-                data.test_dir, interval=None)
-
-        #pdb.set_trace()
-
+        testset = MusicDanceDataset(config.test_data)
         self.test_loader = torch.utils.data.DataLoader(
-            MoDaSeq(music_data, dance_data),
+            testset,
             batch_size=1,
             shuffle=False
-            # collate_fn=paired_collate_fn,
         )
-        self.dance_names = dance_names
-        #pdb.set_trace()
-        #self.training_data = self.test_loader
+        self.dance_names = testset.fnames
+
 
     def _build_optimizer(self):
         #model = nn.DataParallel(model).to(device)
@@ -618,7 +542,7 @@ class AC():
         self.schedular = torch.optim.lr_scheduler.MultiStepLR(self.optimizer, **config.schedular_kwargs)
 
     def _dir_setting(self):
-        data = self.config.data
+
         self.expname = self.config.expname
         self.experiment_dir = os.path.join("./", "experiments")
         self.expdir = os.path.join(self.experiment_dir, self.expname)

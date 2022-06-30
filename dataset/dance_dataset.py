@@ -24,7 +24,4 @@ class DanceDataset(Dataset):
         return len(self.dances)
 
     def __getitem__(self, index):
-        if self.mode == 'train':
-            return self.dances[index]
-        elif self.mode == 'test':
-            return self.dances[index], self.fnames[index]
+        return self.dances[index]

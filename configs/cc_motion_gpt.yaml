@@ -50,7 +50,7 @@ structure:
     
     
 structure_generate:
-    name: CrossCondGPT2
+    name: CrossCondGPT
     #ChoreoGrapher Configs
     block_size: 29
     base:
@@ -92,37 +92,52 @@ optimizer:
         milestones: [250, 400]
         gamma: 0.1
 # schedular: []
-data:
-    name: aist
-    train_dir: data/aistpp_train_wav
-    test_dir: data/aistpp_test_full_wav
-    seq_len: 240
-    data_type: None
+
 testing:
     height: 540
     width: 960
     ckpt_epoch: 400
 
 
+train_data:
+    name: aist   
+    data_dir: /mnt/lustre/syli/dance/Bailando/data/aistpp_train_wav
+    mode: train
+    rotmat: False
+    seq_len: 240
+    move: 8
+    external_wav: /mnt/lustre/syli/dance/Bailando/data/aistpp_music_feat_7.5fps
+    external_wav_rate: 8
+
+test_data:
+    name: aist 
+    mode: test  
+    data_dir: /mnt/lustre/syli/dance/Bailando/data/aistpp_test_full_wav 
+    move: 8
+    rotmat: False
+    external_wav: /mnt/lustre/syli/dance/Bailando/data/aistpp_music_feat_7.5fps
+    external_wav_rate: 8
+
+
 vqvae_weight: 'experiments/sep_vqvae_root/ckpt/epoch_500.pt'
 expname: cc_motion_gpt
 
 
-need_not_train_data: True
 epoch: 500
 batch_size: 32
 # demo: True
 save_per_epochs: 20
 test_freq: 20
 log_per_updates: 1
+external_wav: /mnt/lustre/syli/dance/Bailando/data/aistpp_music_feat_7.5fps
+external_wav_rate: 1
 seed: 42
 rotmat: False
 cuda: True
 global_vel: True
 ds_rate: 8
 move: 8
-external_wav: data/aistpp_music_feat_7.5fps
-external_wav_rate: 1
+
 # random_init_test: True
 music_normalize: False
 # demo: False

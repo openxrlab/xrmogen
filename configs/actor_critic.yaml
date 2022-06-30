@@ -50,7 +50,7 @@ structure:
     
     
 structure_generate:
-    name: CrossCondGPT2AC
+    name: CrossCondGPTAC
     #ChoreoGrapher Configs
     block_size: 29
     base:
@@ -107,13 +107,30 @@ optimizer:
         milestones: [40]
         gamma: 1
 # schedular: []
-data:
-    name: aist
-    train_dir: data/aistpp_test_full_wav # There's no problem here. Don't doubt
-    test_dir: data/aistpp_test_full_wav
-   
+
+
+
+
+train_data:
+    name: aist   
+    data_dir: /mnt/lustre/syli/dance/Bailando/data/aistpp_test_full_wav
+    mode: train
+    rotmat: False
     seq_len: 240
-    data_type: None
+    move: 8
+    external_wav: /mnt/lustre/syli/dance/Bailando/data/aistpp_music_feat_7.5fps
+    external_wav_rate: 1
+
+test_data:
+    name: aist 
+    mode: test  
+    data_dir: /mnt/lustre/syli/dance/Bailando/data/aistpp_test_full_wav 
+    move: 8
+    rotmat: False
+    external_wav: /mnt/lustre/syli/dance/Bailando/data/aistpp_music_feat_7.5fps
+    external_wav_rate: 1
+
+
 testing:
     height: 540
     width: 960
@@ -148,7 +165,3 @@ entropy_alpha: 0.
 actor_loss_decay: 1
 demo: False
 rl_music_root: data/aistpp_test_full_wav
-# sample_shift: 15
-
-# sample_code_length: 150
-# analysis_array: [438, 511, 419, 11, 7, 92, 128, 256, 333]

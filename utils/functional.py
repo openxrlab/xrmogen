@@ -388,7 +388,7 @@ def visualizeAndWrite(results,config,expdir,dance_names, epoch, quants=None):
     np_dances = []
     np_dances_original = []
     dance_datas = []
-    if config.data.name == "aist":
+    if config.test_data.name == "aist":
 
         for i in range(len(results)):
             np_dance = results[i][0].data.cpu().numpy()

@@ -30,14 +30,8 @@ class MusicDanceDataset(Dataset):
         return len(self.musics)
 
     def __getitem__(self, index):
-        if self.mode == 'train':
-            if self.dances is not None:
-                return self.musics[index], self.dances[index],
-            else:
-                return self.musics[index]
-        elif self.mode == 'test':
-            if self.dances is not None:
-                return self.musics[index], self.dances[index], self.fnames
-            else:
-                return self.musics[index], self.fnames
+        if self.dances is not None:
+            return self.musics[index], self.dances[index],
+        else:
+            return self.musics[index]
 
