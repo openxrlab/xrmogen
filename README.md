@@ -9,6 +9,16 @@
 - [ ] +FACT(SOTA方法之一)
 - [ ] configs 分类
 
+## Benchmark
+
+| 方法  | FID_k $\downarrow$ | FID_g $\downarrow$ | DIV_k $\uparrow$ | DIV_g $\uparrow$  | BA $\uparrow$ |
+| :--- | :----: | :----: | :----: | :----: | :----: |
+| Bailando | 28.16 | 9.62 | 7.83 | 6.34 | 0.2332 |
+| FACT | 35.35 | 22.11 | 5.94 | 6.18 | 0.2209 |
+| DanceRevolution | 73.42 | 25.92 | 3.52 | 4.87 | 0.19.50 |
+| DanceNet | 69.18 | 25.49 | 2.86 | 2.85 | 0.1430 |
+
+
 ## 日志
 
 见docs/update.txt
