@@ -32,7 +32,7 @@
 
 ## 训练SOTA （判别式模型）
 
-````sh srun_fact.sh configs/fact.yaml train [your node name] 1
+````sh srun_fact.sh configs/fact.yaml train [your node name] 1````
     
 
 ## 训练
