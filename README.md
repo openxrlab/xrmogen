@@ -30,6 +30,11 @@
 
 下载[预处理数据](https://drive.google.com/file/d/1EGJeBE1fE59ByjxR_-ipwV6Dz-Cx-stT/view?usp=sharing) 到 ./data 文件夹中.
 
+## 训练SOTA （判别式模型）
+
+````sh srun_fact.sh configs/fact.yaml train [your node name] 1
+    
+
 ## 训练
 
 The training of Bailando comprises of 4 steps in the following sequence. If you are using the slurm workload manager, you can directly run the corresponding shell. Otherwise, please remove the 'srun' parts. Our models are all trained with single NVIDIA V100 GPU. * A kind reminder: the quantization code does not fit multi-gpu training
