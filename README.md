@@ -6,7 +6,7 @@
 - [ ] loss 从model分离 (考虑到vqvae commit loss无法分离，考虑把剩余的loss都移动到model里，可能下一步和train_step结合)
 - [ ] visualize 从utils/functional剥离单独建立(?)
 - [ ] evaluation 融入到系统中（+hook？第一步先变成函数）
-- [ ] +FACT(SOTA方法之一)
+- [x] +FACT(SOTA方法之一) (weight尚未trian完/尚未验证数值)
 - [ ] configs 分类
 
 ## Benchmark
