@@ -36,8 +36,8 @@ echo "[INFO] GPU num: $gpunum"
 ((ntask=$gpunum*3))
 
 
-TOOLS="srun --mpi=pmi2 --partition=$partition_name --gres=gpu:$gpunum -n1  --job-name=${config_suffix}"
-PYTHONCMD="python -u main.py --config $1"
+TOOLS="srun --mpi=pmi2 --partition=$partition_name --gres=gpu:$gpunum -n1 --ntasks-per-node=$ntask --job-name=${config_suffix}"
+PYTHONCMD="python -u main_fact.py --config $1"
 
 if [ $2 == "train" ];
 then
@@ -47,16 +47,4 @@ elif [ $2 == "eval" ];
 then
     $TOOLS $PYTHONCMD \
     --eval 
-elif [ $2 == "visgt" ];
-then
-    $TOOLS $PYTHONCMD \
-    --visgt 
-elif [ $2 == "anl" ];
-then
-    $TOOLS $PYTHONCMD \
-    --anl 
-elif [ $2 == "sample" ];
-then
-    $TOOLS $PYTHONCMD \
-    --sample 
 fi
