@@ -6,7 +6,8 @@
 - [ ] loss 从model分离 (考虑到vqvae commit loss无法分离，考虑把剩余的loss都移动到model里，可能下一步和train_step结合)
 - [ ] visualize 从utils/functional剥离单独建立(?)
 - [ ] evaluation 融入到系统中（+hook？第一步先变成函数）
-- [x] +FACT(SOTA方法之一) (weight尚未trian完/尚未验证数值)
+- [x] +FACT(SOTA方法之一) (数值与paper比较差异有些大，暂时放弃)
+- [x] +DanceRevolution(SOTA方法之一) 数值基本符合paper report
 - [ ] configs 分类
 
 ## Benchmark
@@ -15,7 +16,9 @@
 | :--- | :----: | :----: | :----: | :----: | :----: |
 | Bailando | 28.16 | 9.62 | 7.83 | 6.34 | 0.2332 |
 | FACT | 35.35 | 22.11 | 5.94 | 6.18 | 0.2209 |
+| FACT reimpl @ 45epochs| 59.19 | 18.12 | 9.55 | 5.56 | -- |
 | DanceRevolution | 73.42 | 25.92 | 3.52 | 4.87 | 0.19.50 |
+| DanceRevolution reimpl @ 10epochs | 67.48 | 27.08 | 3.61 | 4.55 | -- |
 | DanceNet | 69.18 | 25.49 | 2.86 | 2.85 | 0.1430 |
 
 
