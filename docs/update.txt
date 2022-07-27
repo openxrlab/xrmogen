@@ -1,3 +1,5 @@
 v 0.0.1 建立项目，上传文件
 v 0.0.2 整理datasets code，整理model codes；上传benchmark
 v 0.1.1 确认release weight数值；+FACT code
+
+v 0.2.1 代码风格向mmpose系列转换，完成dataset与models的实现
