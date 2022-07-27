@@ -13,7 +13,7 @@ import pdb
 import numpy
 
 from PIL import Image
-from .keypoint2img import read_keypoints
+from .utils.keypoint2img import read_keypoints
 from multiprocessing import Pool
 from functools import partial
 from tqdm import tqdm

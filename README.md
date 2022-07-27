@@ -10,6 +10,12 @@
 - [x] +DanceRevolution(SOTA方法之一) 数值基本符合paper report
 - [ ] configs 分类
 
+- [ ] 完成train/test api
+- [ ] 完成 runner (epoch runner)
+- [ ] 完成test和validation的hook，将3d pose positions 存到pkl
+- [ ] 完成config 
+- [ ] 完成各项测试
+
 ## Benchmark
 
 | 方法  | FID_k $\downarrow$ | FID_g $\downarrow$ | DIV_k $\uparrow$ | DIV_g $\uparrow$  | BA $\uparrow$ |

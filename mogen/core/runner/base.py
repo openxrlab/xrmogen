@@ -1,9 +1,9 @@
 from mmcv.runner import EpochBasedRunner
 
 
-class NerfTrainRunner(EpochBasedRunner):
+class MoGenTrainRunner(EpochBasedRunner):
     pass
 
 
-class NerfTestRunner(EpochBasedRunner):
+class MoGenTestRunner(EpochBasedRunner):
     pass

@@ -11,14 +11,11 @@ import torch
 from mmcv.runner import get_dist_info
 from mmcv.runner.hooks import HOOKS, Hook
 
-from .utils import calculate_ssim, img2mse, mse2psnr, to8b
-
 
 
 @HOOKS.register_module()
 class SaveDancePKL(Hook):
-    """save testset's render results with spiral poses 在每次val_step()之后调用
-    用于保存test数据集的环型pose渲染图片 这些图片是没有groundtruth的 以视频方式保存."""
+
     def __init__(self, save_folder='validation'):
         # self.save_folder = save_folder
         pass
