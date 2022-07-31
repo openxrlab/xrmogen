@@ -3,3 +3,5 @@ v 0.0.2 整理datasets code，整理model codes；上传benchmark
 v 0.1.1 确认release weight数值；+FACT code
 
 v 0.2.1 代码风格向mmpose系列转换，完成dataset与models的实现
+
+v 0.2.2 实现mmcv各类风格，但还剩余少部分未完成：tools可视化/测数值；dance rev的代码风格+epoch传data hook；另外还未进行在此版本下的测试，可能有bug

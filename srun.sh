@@ -1,62 +1,31 @@
-#!/bin/sh
-currenttime=`date "+%Y%m%d%H%M%S"`
-if [ ! -d log ]; then
-    mkdir log
-fi
+# DATASET=$1
+# # DATASET=Lego
+# PARTITION=$2
+# NUM_GPU=$3
 
-echo "[Usage] ./srun.sh config_path [train|eval] partition gpunum"
-# check config exists
-if [ ! -e $1 ]
-then
-    echo "[ERROR] configuration file: $1 does not exists!"
-    exit
-fi
+# SRUN="srun -p $PARTITION -n1 --mpi=pmi2 --gres=gpu:$NUM_GPU --ntasks-per-node=1 --cpus-per-task=8 -x SH-IDC1-10-5-37-39 --job-name=train_generator --kill-on-bad-exit=0"
+# PYTHON="/mnt/lustre/fanrui/miniconda3/envs/kilonerf/bin/python -u "
+# # PYTHON="/mnt/lustre/share/spring/conda_envs/miniconda3/envs/s0.3.4/bin/python -u "
 
+# echo "[INFO] DATASET: $DATASET"
+# echo "[INFO] Partition: $PARTITION, Used GPU Num: $NUM_GPU. "
+# echo "[INFO] SRUN: $SRUN"
+# echo "[INFO] PYTHON: $PYTHON"
 
-if [ ! -d ${expname} ]; then
-    mkdir ${expname}
-fi
+# # SCRIPT1="train_kilonerf_new.py"
+# SCRIPT1="run_nerf.py"
 
-echo "[INFO] saving results to, or loading files from: "$expname
-
-if [ "$3" == "" ]; then
-    echo "[ERROR] enter partition name"
-    exit
-fi
-partition_name=$3
-echo "[INFO] partition name: $partition_name"
-
-if [ "$4" == "" ]; then
-    echo "[ERROR] enter gpu num"
-    exit
-fi
-gpunum=$4
-gpunum=$(($gpunum<8?$gpunum:8))
-echo "[INFO] GPU num: $gpunum"
-((ntask=$gpunum*3))
+# # PYTHON_SCRIPT1="$PYTHON $SCRIPT1 --config ./configs/kilonerfsv3/$CONFIG --test_only"
+# PYTHON_SCRIPT1="$PYTHON $SCRIPT1 --config ./configs/kilonerfs/kilonerf_pretrain_Synthetic_NeRF_base01.py --dataname $DATASET"
+# PYTHON_SCRIPT2="$PYTHON $SCRIPT1 --config ./configs/kilonerfs/kilonerf_distill_Synthetic_NeRF_base01.py --dataname $DATASET"
+# PYTHON_SCRIPT3="$PYTHON $SCRIPT1 --config ./configs/kilonerfs/kilonerf_finetune_Synthetic_NeRF_base01.py --dataname $DATASET"
 
 
-TOOLS="srun --mpi=pmi2 --partition=$partition_name --gres=gpu:$gpunum -n1  --job-name=${config_suffix}"
-PYTHONCMD="python -u main.py --config $1"
+# echo "$PYTHON_SCRIPT1"
+# $PYTHON_SCRIPT1
+# echo "$PYTHON_SCRIPT2"
+# $PYTHON_SCRIPT2
+# echo "$PYTHON_SCRIPT3"
+# $PYTHON_SCRIPT3
 
-if [ $2 == "train" ];
-then
-    $TOOLS $PYTHONCMD \
-    --train 
-elif [ $2 == "eval" ];
-then
-    $TOOLS $PYTHONCMD \
-    --eval 
-elif [ $2 == "visgt" ];
-then
-    $TOOLS $PYTHONCMD \
-    --visgt 
-elif [ $2 == "anl" ];
-then
-    $TOOLS $PYTHONCMD \
-    --anl 
-elif [ $2 == "sample" ];
-then
-    $TOOLS $PYTHONCMD \
-    --sample 
-fi
+srun -p dsta -n1 --mpi=pmi2 --gres=gpu:1 --ntasks-per-node=1 --cpus-per-task=8 python main.py --config ./configs/bailando_motion_vqvae.py

@@ -188,8 +188,9 @@ class Decoder(nn.Module):
 
 @DANCE_MODELS.register_module()
 class DanceRevolution(nn.Module):
-    def __init__(self, args):
+    def __init__(self, model_config):
         super().__init__()
+        args = model_config
         self.model_args = args
 
         encoder = Encoder(max_seq_len=args.max_seq_len,
@@ -300,7 +301,7 @@ class DanceRevolution(nn.Module):
         self.decoder.train()
         self.linear.train()
         
-        aud_seq, pose_seq  = data
+        aud_seq, pose_seq  = data['music'], data['dance'] 
 
         gold_seq = pose_seq[:, 1:] 
         src_aud = aud_seq[:, :-1]
@@ -334,9 +335,9 @@ class DanceRevolution(nn.Module):
         results = []
         self.eval()
         with torch.no_grad():            
-            aud_seq_eval, pose_seq_eval = batch_eval
+            aud_seq_eval, pose_seq_eval = data['music'], data['dance'] 
             
-            pose_seq_out = model.module.generate(aud_seq_eval)  # first 20 secs
+            pose_seq_out = self.generate(aud_seq_eval)  # first 20 secs
             results.append(pose_seq_out)
         outputs = {
             'output_pose': results

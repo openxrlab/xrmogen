@@ -14,22 +14,25 @@ from ...builder import DANCE_MODELS
 @DANCE_MODELS.register_module()
 class Bailando(nn.Module):
 
-    def __init__(self, config):
+    def __init__(self, model_config):
         super().__init__()
-        self.bailando_phase = config['bailando_phase']
-        self.vqvae = SepVQVAER(config.vqvae)
-        self.gpt = CrossCondGPT(config.gpt)
+        self.bailando_phase = model_config['bailando_phase']
+        self.vqvae = SepVQVAER(model_config.vqvae)
+        self.gpt = CrossCondGPT(model_config.gpt)
+        
+        self.val_results = {}
     
     def train_step(self, data, optimizer, **kwargs):
         train_phase = self.bailando_phase
 
-        music_seq, pose_seq  = data 
+        music_seq, pose_seq  = data['music'], data['dance'] 
+
         optimizer.zero_grad()
 
         if train_phase == 'motion vqvae':
             self.vqvae.train()
             pose_seq[:, :, :3] = 0
-            _, loss, metrics = self.vqvae(pose_seq, train_phase)
+            out, loss, metrics = self.vqvae(pose_seq, train_phase)
 
         elif train_phase == 'global velocity':
             self.vqvae.train()
@@ -37,7 +40,7 @@ class Bailando(nn.Module):
             pose_seq[:, -1, :3] = pose_seq[:, -2, :3]
             pose_seq = pose_seq.clone().detach()
 
-            _, loss, metrics = self.vqvae(pose_seq, train_phase)
+            out, loss, metrics = self.vqvae(pose_seq, train_phase)
 
         elif train_phase == 'gpt':
             pose_seq[:, :, :3] = 0
@@ -53,7 +56,7 @@ class Bailando(nn.Module):
                     quants_input = quants[:, :-1].clone().detach()
                     quants_target = quants[:, 1:].clone().detach()
 
-            _, loss = self.gpt(quants_input, music_seq[:, 1:], quants_target)
+            out, loss = self.gpt(quants_input, music_seq[:, 1:], quants_target)
 
         else:
             raise NotImplementedError
@@ -62,12 +65,13 @@ class Bailando(nn.Module):
             'loss': loss.item()
         }
         outputs = {
-            'loss': loss.item(),
+            'loss': loss,
             'log_vars': stats,
+            'num_samples': out.size(1)
         }
 
-        loss.backward()
-        optimizer.step()
+        # loss.backward()
+        # optimizer.step()
         return outputs
 
     def val_step(self, data, optimizer, **kwargs):
@@ -77,8 +81,9 @@ class Bailando(nn.Module):
     def test_step(self, data, optimizer, **kwargs):
         test_phase = self.bailando_phase
 
-        music_seq, pose_seq  = data 
+        music_seq, pose_seq  = data['music'], data['dance'] 
         self.eval()
+        
         results = []
 
         pose_seq[:, :, :3] = 0
@@ -86,6 +91,7 @@ class Bailando(nn.Module):
             if test_phase == 'motion vqvae':
                 pose_seq[:, :, :3] = 0
                 pose_seq_out, _, _ = self.vqvae(pose_seq, test_phase)
+                results.append(pose_seq_out) 
 
             elif test_phase == 'global velocity':
                 pose_seq[:, :-1, :3] = pose_seq[:, 1:, :3] - pose_seq[:, :-1, :3]
@@ -98,6 +104,7 @@ class Bailando(nn.Module):
                 pose_seq_out[:, 0, :3] = 0
                 for iii in range(1, pose_seq_out.size(1)):
                     pose_seq_out[:, iii, :3] = pose_seq_out[:, iii-1, :3] + global_vel[:, iii-1, :]
+                results.append(pose_seq_out) 
 
             elif test_phase == 'gpt':
                 
@@ -120,10 +127,14 @@ class Bailando(nn.Module):
                 results.append(pose_sample)
             else:
                 raise NotImplementedError
-
+        
+        self.val_results.update({data['file_names'][0]: results[0]})
         outputs = {
-            'output_pose': results
+            'output_pose': self.val_results,
+            'file_names': data['file_names']
         }
+
+        return outputs
 
 
     

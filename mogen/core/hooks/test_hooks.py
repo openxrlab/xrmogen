@@ -12,8 +12,6 @@ import torch
 from mmcv.runner import get_dist_info
 from mmcv.runner.hooks import HOOKS, Hook
 
-from .utils import calculate_ssim, img2mse, mse2psnr, to8b
-
 
 @HOOKS.register_module()
 class TestHook(Hook):
@@ -33,7 +31,10 @@ class TestHook(Hook):
         pass 
 
     def before_val_epoch(self, runner):
-        pass
+        """
+            prepare experiment folder
+            experiments
+        """
 
     def after_val_iter(self, runner):
         pass

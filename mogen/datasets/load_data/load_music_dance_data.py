@@ -26,7 +26,6 @@ def load_train_data_aist(cfg):
             np_music = np.array(sample_dict['music_array'])
 
             if external_wav is not None:
-                print('lalala ')
                 wav_path = os.path.join(external_wav, fname.split('_')[-2] + '.json')
 
                 with open(wav_path) as ff:
@@ -55,14 +54,14 @@ def load_train_data_aist(cfg):
                         music_sub_seq_pad = music_sub_seq
                         music_data.append(music_sub_seq_pad)
                         dance_data.append(dance_sub_seq)
-                        input_names.append(fname)
+                        input_names.append(fname.split('.')[0])
                         tot += 1
                         
 
             else:
                 music_data.append(np_music)
                 dance_data.append(np_dance)
-                input_names.append(fname)
+                input_names.append(fname.split('.')[0])
 
 
     return music_data, dance_data, input_names
@@ -112,7 +111,7 @@ def load_test_data_aist(cfg):
                 np_music = np.append(np_music, np_music[-1:], axis=0)
 
             music_data.append(np_music)
-            input_names.append(fname)
+            input_names.append(fname.split('.')[0])
 
     return music_data, dance_data, input_names
     

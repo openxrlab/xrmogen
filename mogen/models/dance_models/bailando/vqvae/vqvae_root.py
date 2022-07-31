@@ -164,7 +164,7 @@ class VQVAER(nn.Module):
         zs = [t.randint(0, self.l_bins, size=(n_samples, *z_shape), device='cuda') for z_shape in self.z_shapes]
         return self.decode(zs)
 
-    def forward(self, x):
+    def forward(self, x, phase='motion vqvae'):
         self.bottleneck.eval()
         with t.no_grad():
 
@@ -202,26 +202,40 @@ class VQVAER(nn.Module):
         regularization = t.zeros(()).to(x.device)
         velocity_loss = t.zeros(()).to(x.device)
         acceleration_loss = t.zeros(()).to(x.device)
-        x_target = x.float()[:, :, :self.hps.joint_channel]
+
+        x_target = x_zero if phase=='motion vqvae' else x.float()[:, :, :self.hps.joint_channel]
 
         for level in reversed(range(self.levels)):
             x_out_vel = self.postprocess(x_outs_vel[level])
-            x_out = self.postprocess(x_outs[level])
+            x_out_zero = self.postprocess(x_outs[level])
             _, _, cc = x_out_vel.size()
+            x_out = x_out_zero.clone().detach()
             x_out[:, :, :cc] = x_out_vel
 
-            this_recons_loss = _loss_fn(x_target, x_out_vel)
+            if phase == 'motion vqvae':
+                this_recons_loss = _loss_fn(x_target, x_out_zero)  
+                this_velocity_loss = _loss_fn( x_out_zero[:, 1:] - x_out_zero[:, :-1], x_target[:, 1:] - x_target[:, :-1])
+                this_acceleration_loss =  _loss_fn(x_out_zero[:, 2:] + x_out_zero[:, :-2] - 2 * x_out_zero[:, 1:-1], x_target[:, 2:] + x_target[:, :-2] - 2 * x_target[:, 1:-1])
+            else:
+                this_recons_loss =_loss_fn(x_target, x_out_vel)
+                this_velocity_loss = 0
+                this_acceleration_loss +=  _loss_fn( x_out_vel[:, 1:] - x_out_vel[:, :-1], x_target[:, 1:] - x_target[:, :-1])
+
             metrics[f'recons_loss_l{level + 1}'] = this_recons_loss
+
             recons_loss += this_recons_loss
-
-            # only compute the first oder direvative since the reconstruction target is already the velocity
-            acceleration_loss +=  _loss_fn( x_out_vel[:, 1:] - x_out_vel[:, :-1], x_target[:, 1:] - x_target[:, :-1])
-
-        loss = recons_loss + self.acc * acceleration_loss
-
+            velocity_loss += this_velocity_loss
+            acceleration_loss +=  this_acceleration_loss
+        
+        if phase == 'motion vqvae':
+        # this loss can not be split from the model due to commit_loss
+            commit_loss = sum(commit_losses)
+            loss = recons_loss +  commit_loss * self.commit + self.vel * velocity_loss + self.acc * acceleration_loss
+        else:
+            loss = recons_loss + self.acc * acceleration_loss
 
         with t.no_grad():
-            l1_loss = _loss_fn(x_target, x_out_vel)
+            l1_loss = _loss_fn(x_target, x_out_zero) if phase == 'motion vqvae' else _loss_fn(x_target, x_out_vel)
 
         quantiser_metrics = average_metrics(quantiser_metrics)
 

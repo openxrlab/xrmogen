@@ -1,20 +1,20 @@
 
-from load_data.load_music_dance_data import load_train_data_aist, load_test_data_aist
+from .load_data.load_music_dance_data import load_train_data_aist, load_test_data_aist
 """ Define the paired music-dance dataset. """
 import numpy as np
 import torch
 import torch.utils.data
 from torch.utils.data import Dataset
 from .builder import DATASETS
-from pipeline.compose import Compose
+from .pipeline.compose import Compose
 
 @DATASETS.register_module()
-class MusicDanceDataset(Dataset):
-    def __init__(self, cfg, pipeline):
-        self.cfg = cfg
+class AISTppDataset(Dataset):
+    def __init__(self, data_config, pipeline):
+        self.cfg = data_config
         self.dances = None
         self.musics = None
-        self.mode = cfg.mode
+        self.mode = self.cfg.mode
         self._init_load()
         self.pipeline = Compose(pipeline)
 
@@ -24,6 +24,7 @@ class MusicDanceDataset(Dataset):
         elif self.mode == 'test':
             musics, dances, fnames = load_test_data_aist(self.cfg)
         
+        print(len(musics), len(dances), len(fnames))
         self.musics = musics
         self.dances = dances
         self.fnames = fnames
