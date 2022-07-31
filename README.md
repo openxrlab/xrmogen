@@ -1,10 +1,10 @@
 
 # TODO
 
-- [ ] 完成train/test api
-- [ ] 完成 runner (epoch runner)
-- [ ] 完成test和validation的hook，将3d pose positions 存到pkl
-- [ ] 完成config 
+- [x] 完成train/test api
+- [x] 完成 runner (epoch runner)
+- [x] 完成test和validation的hook，将3d pose positions 存到pkl
+- [x] 完成config 
 - [ ] 完成各项测试
 
 ## Benchmark
