@@ -1,15 +1,13 @@
 
 # TODO
-
-- [x] load data功能从utils/functional转移到dataset
-- [x] model分类分文件夹
-- [ ] loss 从model分离 (考虑到vqvae commit loss无法分离，考虑把剩余的loss都移动到model里，可能下一步和train_step结合)
-- [ ] visualize 从utils/functional剥离单独建立(?)
-- [ ] evaluation 融入到系统中（+hook？第一步先变成函数）
-- [x] +FACT(SOTA方法之一) (数值与paper比较差异有些大，暂时放弃)
-- [x] +DanceRevolution(SOTA方法之一) 数值基本符合paper report
-- [ ] configs 分类
-
+- [x] 完成train/test api
+- [x] 完成 runner (epoch runner)
+- [x] 完成test和validation的hook，将3d pose positions 存到pkl
+- [x] 完成config 
+- [x] 完成dance revolution 的代码风格化转变
+- [x] 完成tools的代码优化
+- [ ] 完成各项测试（在当前框架下的重新训练、测试、resume等）
+- [ ] docker
 ## Benchmark
 
 | 方法  | FID_k $\downarrow$ | FID_g $\downarrow$ | DIV_k $\uparrow$ | DIV_g $\uparrow$  | BA $\uparrow$ |
