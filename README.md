@@ -4,9 +4,10 @@
 - [x] 完成 runner (epoch runner)
 - [x] 完成test和validation的hook，将3d pose positions 存到pkl
 - [x] 完成config 
-- [ ] 完成dance revolution 的代码风格化转变
-- [ ] 完成tools的代码优化
+- [x] 完成dance revolution 的代码风格化转变
+- [x] 完成tools的代码优化
 - [ ] 完成各项测试（在当前框架下的重新训练、测试、resume等）
+- [ ] docker
 ## Benchmark
 
 | 方法  | FID_k $\downarrow$ | FID_g $\downarrow$ | DIV_k $\uparrow$ | DIV_g $\uparrow$  | BA $\uparrow$ |
