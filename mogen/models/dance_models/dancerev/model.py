@@ -117,7 +117,7 @@ class Encoder(nn.Module):
         enc_slf_attn_list = []
 
         # -- Forward
-        enc_output = self.src_emb(src_seq) + self.position_enc(src_pos)
+        enc_output = self.src_emb(src_seq) + self.position_enc(src_pos).float()
 
         for enc_layer in self.layer_stack:
             enc_output, enc_slf_attn = enc_layer(enc_output, slf_attn_mask=mask)
@@ -192,6 +192,7 @@ class DanceRevolution(nn.Module):
         super().__init__()
         args = model_config
         self.model_args = args
+        self._epoch = None
 
         encoder = Encoder(max_seq_len=args.max_seq_len,
             input_size=args.d_frame_vec,
@@ -309,21 +310,18 @@ class DanceRevolution(nn.Module):
 
         optimizer.zero_grad()
 
-        output = self.forward(src_aud, src_pos, epoch_i)
+        output = self.forward(src_aud, src_pos, self._epoch)
 
         loss = torch.nn.functional.mse_loss(output, gold_seq)
-        loss.backward()
-
-        # update parameters
-        optimizer.step()
 
         stats = {
             'loss': loss.item()
         }
 
         outputs = {
-            'loss': loss.item(),
+            'loss': loss,
             'log_vars': stats,
+            'num_samples': output.size(1)
         }
         
         return outputs
@@ -337,10 +335,11 @@ class DanceRevolution(nn.Module):
         with torch.no_grad():            
             aud_seq_eval, pose_seq_eval = data['music'], data['dance'] 
             
-            pose_seq_out = self.generate(aud_seq_eval)  # first 20 secs
+            pose_seq_out = self.generate(aud_seq_eval) 
             results.append(pose_seq_out)
         outputs = {
-            'output_pose': results
+            'output_pose': results[0],
+            'file_name': data['file_names'][0]
         }
         return outputs
 

@@ -20,7 +20,7 @@ class Bailando(nn.Module):
         self.vqvae = SepVQVAER(model_config.vqvae)
         self.gpt = CrossCondGPT(model_config.gpt)
         
-        self.val_results = {}
+        # self.val_results = {}
     
     def train_step(self, data, optimizer, **kwargs):
         train_phase = self.bailando_phase
@@ -81,7 +81,7 @@ class Bailando(nn.Module):
     def test_step(self, data, optimizer, **kwargs):
         test_phase = self.bailando_phase
 
-        music_seq, pose_seq  = data['music'], data['dance'] 
+        music_seq, pose_seq = data['music'], data['dance']
         self.eval()
         
         results = []
@@ -89,6 +89,8 @@ class Bailando(nn.Module):
         pose_seq[:, :, :3] = 0
         with torch.no_grad():
             if test_phase == 'motion vqvae':
+                
+                # print(pose_seq[0, 7, 6], )
                 pose_seq[:, :, :3] = 0
                 pose_seq_out, _, _ = self.vqvae(pose_seq, test_phase)
                 results.append(pose_seq_out) 
@@ -128,10 +130,10 @@ class Bailando(nn.Module):
             else:
                 raise NotImplementedError
         
-        self.val_results.update({data['file_names'][0]: results[0]})
+        # self.val_results.update({data['file_names'][0]: results[0]})
         outputs = {
-            'output_pose': self.val_results,
-            'file_names': data['file_names']
+            'output_pose': results[0],
+            'file_name': data['file_names'][0]
         }
 
         return outputs

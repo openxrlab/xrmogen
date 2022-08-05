@@ -2,7 +2,7 @@
 # LICENSE file in the root directory of this open-source project.
 
 
-""" Define the functions to load data. """
+from email.mime import audio
 import os
 import json
 import argparse
@@ -13,17 +13,21 @@ import pdb
 import numpy
 
 from PIL import Image
-from .utils.keypoint2img import read_keypoints
+from utils.keypoint2img import read_keypoints
 from multiprocessing import Pool
 from functools import partial
 from tqdm import tqdm
 import pickle
 import cv2
 
-from scipy.spatial.transform import Rotation as R
-
 import os
 import shutil
+import mmcv
+
+pose_keypoints_num = 25
+face_keypoints_num = 70
+hand_left_keypoints_num = 21
+hand_right_keypoints_num = 21
 
 def img2video(expdir, epoch, audio_path=None):
     video_dir = os.path.join(expdir, "videos",f"ep{epoch:06d}")
@@ -34,7 +38,7 @@ def img2video(expdir, epoch, audio_path=None):
 
 
     dance_names = sorted(os.listdir(image_dir))
-    audio_dir = "aist_plusplus_final/all_musics"
+
     
     music_names = sorted(os.listdir(audio_dir))
     
@@ -45,6 +49,9 @@ def img2video(expdir, epoch, audio_path=None):
         # cmd = f"ffmpeg -r 60 -i {image_dir}/{dance}/%05d.png -vb 20M -vcodec qtrle -y {video_dir}/{name}.mov -loglevel quiet"
 
         os.system(cmd)
+
+        if audio_path is None or audio_path == '':
+            continue
         
         name1 = name.replace('cAll', 'c02')
 
@@ -56,14 +63,10 @@ def img2video(expdir, epoch, audio_path=None):
             music_names = sorted(os.listdir(audio_dir))
         
         if music_name in music_names:
-            print('combining audio!')
             audio_dir_ = os.path.join(audio_dir, music_name)
-            print(audio_dir_)
             name_w_audio = name + "_audio"
             cmd_audio = f"ffmpeg -i {video_dir}/{name}.mp4 -i {audio_dir_} -map 0:v -map 1:a -c:v copy -shortest -y {video_dir}/{name_w_audio}.mp4 -loglevel quiet"
             os.system(cmd_audio)
-
-
 
 def visualize_json(fname_iter, image_dir, dance_name, dance_path, config, quant=None):
     j, fname = fname_iter
@@ -208,20 +211,21 @@ class VSConfig():
     height = 540
     width = 960*2
 
-def visualizeAndWritefromPKL(pkl_root, config=None):
-    if config is None:
-        config = VSConfig()
+def visualizeAndWritefromPKL(pkl_root, audio_path=None):
+    config = VSConfig()
     dance_names = []
     np_dances = []
     np_dances_original = []
     dance_datas = []
     for pkl_name in os.listdir(pkl_root):
-        if os.path.isdir(os.path.join(pkl_root, pkl_name)):
-            continue
-        result = np.load(os.path.join(pkl_root, pkl_name), allow_pickle=True).item()['pred_position']
-        dance_names.append(pkl_name)
 
-        np_dance = result
+        if not pkl_name.endswith('.pkl'):
+            continue
+        print(pkl_name, flush=True)
+        result = mmcv.load(os.path.join(pkl_root, pkl_name))
+        dance_names.append(pkl_name.split('.pkl')[0])
+
+        np_dance = result[0]
 
         root = np_dance[:, :3]
         # np_dance = np_dance - np.tile(root, (1, 24))
@@ -288,12 +292,21 @@ def visualizeAndWritefromPKL(pkl_root, config=None):
     
     write2json(np_dances, dance_names,config, pkl_root, 0)
     visualize(config, dance_names, pkl_root, 0, quants=None)
-    img2video(pkl_root, 0)
+    img2video(pkl_root, 0, audio_path=audio_path)
 
-    json_dir = os.path.join(pkl_root, "jsons",f"ep{123221:06d}")
-    img_dir = os.path.join(pkl_root, "imgs",f"ep{123221:06d}")
+    json_dir = os.path.join(pkl_root, "jsons")
+    img_dir = os.path.join(pkl_root, "imgs")
     if os.path.exists(json_dir):    
         shutil.rmtree(json_dir)
     if os.path.exists(img_dir):
         shutil.rmtree(img_dir)
 
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='visulize from recorded pkl')
+    parser.add_argument('--pkl_root', type=str)
+    parser.add_argument('--audio_path', type=str, default='')
+    args = parser.parse_args()
+
+    visualizeAndWritefromPKL(args.pkl_root, args.audio_path)

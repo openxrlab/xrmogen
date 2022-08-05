@@ -18,13 +18,14 @@ class AISTppDataset(Dataset):
         self._init_load()
         self.pipeline = Compose(pipeline)
 
+
     def _init_load(self):
         if self.mode == 'train':
             musics, dances, fnames = load_train_data_aist(self.cfg)
         elif self.mode == 'test':
             musics, dances, fnames = load_test_data_aist(self.cfg)
         
-        print(len(musics), len(dances), len(fnames))
+        print(len(musics), musics[0].shape, len(dances), dances[0].shape, len(fnames))
         self.musics = musics
         self.dances = dances
         self.fnames = fnames

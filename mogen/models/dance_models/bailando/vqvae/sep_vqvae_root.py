@@ -64,7 +64,7 @@ class SepVQVAER(nn.Module):
         xup = x[:, :, smpl_up, :].view(b, t, -1)
         xdown = x[:, :, smpl_down, :].view(b, t, -1)
 
-        self.vqvae_up.eval()
+
         x_out_up, loss_up, metrics_up = self.vqvae_up(xup)
         x_out_down , loss_down , metrics_down  = self.vqvae_down(xdown, phase)
 
@@ -78,7 +78,7 @@ class SepVQVAER(nn.Module):
 
 
         if phase == 'motion vqvae':
-            return xout.view(b, t, -1), 0.5*(loss_down + loss_up), [metrics_up, metrics_down]
+            return xout.view(b, t, -1), 0.5*(loss_down + loss_up), None
         else:
             metrics_up['acceleration_loss'] *= 0
             metrics_up['velocity_loss'] *= 0 

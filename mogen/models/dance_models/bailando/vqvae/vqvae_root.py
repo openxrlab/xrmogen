@@ -165,7 +165,9 @@ class VQVAER(nn.Module):
         return self.decode(zs)
 
     def forward(self, x, phase='motion vqvae'):
-        self.bottleneck.eval()
+        
+        if phase == 'global velocity':
+            self.bottleneck.eval()
         with t.no_grad():
 
             metrics = {}
@@ -179,7 +181,9 @@ class VQVAER(nn.Module):
             x_in = self.preprocess(x_zero)
             xs = []
             for level in range(self.levels):
-                encoder = self.encoders[level].eval()
+                encoder = self.encoders[level]
+                if phase == 'global velocity':
+                    encoder.eval()
                 x_out = encoder(x_in)
                 xs.append(x_out[-1])
 
@@ -188,7 +192,9 @@ class VQVAER(nn.Module):
             x_outs_vel = []
             
         for level in range(self.levels):
-            decoder = self.decoders[level].eval()
+            decoder = self.decoders[level]
+            if phase == 'global velocity':
+                decoder.eval()
             decoder_root = self.decoders_root[level]
             x_out = decoder(xs_quantised[level:level+1], all_levels=False)
             x_vel_out = decoder_root(xs_quantised[level:level+1], all_levels=False)

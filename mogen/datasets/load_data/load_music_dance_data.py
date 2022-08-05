@@ -23,7 +23,7 @@ def load_train_data_aist(cfg):
         with open(path) as f:
 
             sample_dict = json.loads(f.read())
-            np_music = np.array(sample_dict['music_array'])
+            np_music = np.array(sample_dict['music_array']).astype(np.float32)
 
             if external_wav is not None:
                 wav_path = os.path.join(external_wav, fname.split('_')[-2] + '.json')
@@ -32,7 +32,7 @@ def load_train_data_aist(cfg):
                     sample_dict_wav = json.loads(ff.read())
                     np_music = np.array(sample_dict_wav['music_array']).astype(np.float32)
         
-            np_dance = np.array(sample_dict['dance_array'])
+            np_dance = np.array(sample_dict['dance_array']).astype(np.float32)
 
             if not rotmat:
                 root = np_dance[:, :3]  # the root
@@ -49,6 +49,8 @@ def load_train_data_aist(cfg):
 
                     music_sub_seq = np_music[i_sample: i_sample + interval_sample]
                     dance_sub_seq = np_dance[i: i + interval]
+                    
+
 
                     if len(music_sub_seq) == interval_sample and len(dance_sub_seq) == interval:
                         music_sub_seq_pad = music_sub_seq
@@ -115,3 +117,4 @@ def load_test_data_aist(cfg):
 
     return music_data, dance_data, input_names
     
+

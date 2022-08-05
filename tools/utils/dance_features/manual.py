@@ -33,26 +33,17 @@ import numpy as np
 from . import utils as feat_utils
 
 
-# SMPL_JOINT_NAMES = [
-#     "root", 
-#     "lhip", "lknee", "lankle", "ltoes", 
-#     "rhip", "rknee", "rankle", "rtoes",
-#     "belly", "spine", "chest", "neck", "head", 
-#     "linshoulder", "lshoulder", "lelbow", "lwrist",
-#     "rinshoulder", "rshoulder", "relbow", "rwrist"
-# ]
-
-
-
 SMPL_JOINT_NAMES = [
-    "root", 
-    "lhip", "rhip", "belly",
-    "lknee", "rknee", "spine",
-    "lankle", "rankle",  "chest", 
-    "ltoes",  "rtoes", "neck", "linshoulder", "rinshoulder",
-     "head",  "lshoulder", "rshoulder", 
-     "lelbow", "relbow", 
-     "lwrist", "rwrist"
+    "root",     
+    "lhip", "rhip", "belly",    
+    "lknee", "rknee", "spine",    
+    "lankle", "rankle", "chest",     
+    "ltoes", "rtoes", "neck", 
+    "linshoulder", "rinshoulder",     
+    "head",  "lshoulder", "rshoulder",      
+    "lelbow", "relbow",      
+    "lwrist", "rwrist",     
+    "lhand", "rhand",
 ]
 
 
@@ -164,18 +155,18 @@ class ManualFeatures:
 
         # humerus length
         self.hl = feat_utils.distance_between_points(
-            [0.00121265,  0.37817603,  0.03681623],  # "lshoulder",
-            [0.19911349,  0.23680794, -0.01807022],  # "lelbow"
+            [1.99113488e-01,  2.36807942e-01, -1.80702247e-02],  # "lshoulder",
+            [4.54445392e-01,  2.21158922e-01, -4.10167128e-02],  # "lelbow"
         )
         # shoulder width
         self.sw = feat_utils.distance_between_points(
-            [0.00121265,  0.37817603,  0.03681623],  # "lshoulder"
-            [-0.45181984,  0.2225595,  -0.04357424],  # "rshoulder"
+            [1.99113488e-01,  2.36807942e-01, -1.80702247e-02],  # "lshoulder"
+            [-1.91692337e-01,  2.36928746e-01, -1.23055102e-02,],  # "rshoulder"
         )
         # hip width
         self.hw = feat_utils.distance_between_points(
-            [0.05640767, -0.32306919,  0.01091971],  # "lhip"
-            [-0.10574003, -0.7149903,  0.01019822],  # "rhip"
+            [5.64076714e-02, -3.23069185e-01,  1.09197125e-02],  # "lhip"
+            [-6.24834076e-02, -3.31302464e-01,  1.50412619e-02],  # "rhip"
         )
 
     def next_frame(self):
@@ -213,7 +204,7 @@ class ManualFeatures:
             self.transform_and_fetch_position(j) for j in [j1, j2, j3, j4]
         ]
         return feat_utils.velocity_direction_above_threshold(
-            j1, j1_prev, j2, j2_prev, j3, j3_prev, range
+            j1, j1_prev, j2, j2_prev, j3, j3_prev, range,
         )
 
     def f_nmove(self, j1, j2, j3, j4, range):
@@ -233,18 +224,21 @@ class ManualFeatures:
         ]
         return feat_utils.distance_from_plane(j1, j2, j3, j4, threshold)
 
+    # 
     def f_nplane(self, j1, j2, j3, j4, threshold):
         j1, j2, j3, j4 = [
             self.transform_and_fetch_position(j) for j in [j1, j2, j3, j4]
         ]
         return feat_utils.distance_from_plane_normal(j1, j2, j3, j4, threshold)
 
+    # relative
     def f_angle(self, j1, j2, j3, j4, range):
         j1, j2, j3, j4 = [
             self.transform_and_fetch_position(j) for j in [j1, j2, j3, j4]
         ]
         return feat_utils.angle_within_range(j1, j2, j3, j4, range)
 
+    # non-relative 
     def f_fast(self, j1, threshold):
         j1_prev = self.transform_and_fetch_prev_position(j1)
         j1 = self.transform_and_fetch_position(j1)

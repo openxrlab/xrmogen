@@ -8,7 +8,7 @@ __all__ = ['run_mogen']
 def run_mogen(args):
     cfg = Config.fromfile(args.config)
     if args.test_only:
-        cfg['model']['cfg']['phase'] = 'test'
+        cfg['model']['model_config']['phase'] = 'test'
         test_mogen(cfg)
     else:
         train_mogen(cfg)

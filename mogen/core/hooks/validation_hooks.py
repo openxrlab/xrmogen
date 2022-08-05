@@ -18,21 +18,38 @@ class SaveDancePKLHook(Hook):
 
     def __init__(self, save_folder='validation'):
         self.save_folder = save_folder
-        # pass
+        self.count = 0
+
+
+    def before_val_epoch(self, runner):
+        """
+            prepare experiment folder
+            experiments
+        """
+        self.dance_results = {}
+
+    def after_val_iter(self, runner):
+        rank, _ = get_dist_info()
+        if rank == 0:
+            dance_poses, dance_name = runner.outputs['output_pose'], runner.outputs['file_name']
+            self.dance_results[dance_name] = dance_poses
 
     def after_val_epoch(self, runner):
         rank, _ = get_dist_info()
         if rank == 0:
             cur_epoch = runner.epoch
-            dance_poses = runner.outputs['output_pose']
-            print(len(dance_poses), flush=True)
+
+            print(len(self.dance_results), flush=True)
 
 
             store_dir = os.path.join(runner.work_dir, self.save_folder, 'epoch' + str(cur_epoch))
             os.makedirs(store_dir, exist_ok=True)
 
-            for key in dance_poses:
-                mmcv.dump(dance_poses[key].cpu().data.numpy(), os.path.join(store_dir, key + '.pkl'))
+            for key in self.dance_results:
+                mmcv.dump(self.dance_results[key].cpu().data.numpy(), os.path.join(store_dir, key + '.pkl'))
+
+            # need to manually add 1 here 
+            runner._epoch += 1
 
 @HOOKS.register_module()
 class SetValPipelineHook(Hook):

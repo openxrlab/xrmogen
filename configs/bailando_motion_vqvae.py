@@ -17,12 +17,12 @@ optimizer_config = dict(grad_clip=None)
 lr_rate = 3e-5
 max_epochs = 500
 evalute_config = dict()
-lr_config = dict(policy='step', step=[100, 200], gamma=0.1)
+lr_config = dict(policy='step', step=[100, 200], gamma=0.1, by_epoch=True)
 checkpoint_config = dict(interval=20, by_epoch=True)
 log_level = 'INFO'
 log_config = dict(interval=10,  by_epoch=False, hooks=[dict(type='TextLoggerHook')])
 workflow = [('train', 20), ('val', 1)]
-
+# workflow = [('val', 1)]
 # hooks
 # 'params' are numeric type value, 'variables' are variables in local environment
 train_hooks = [
@@ -32,7 +32,7 @@ train_hooks = [
 
 test_hooks = [
     dict(type='SaveDancePKLHook',
-         params=dict()),
+         params=dict(save_folder='test')),
 ]
 
 # runner
@@ -42,7 +42,7 @@ test_runner = dict(type='DanceTestRunner')
 # runtime settings
 num_gpus = 1
 distributed = 0  # 是否多卡，mmcv对dp多卡支持不好，故而要么单卡要么ddp多卡
-work_dir = './trytry/'.format(phase)  # noqa
+work_dir = './trytry2/'.format(phase)  # noqa
 timestamp = datetime.now().strftime("%d-%b-%H-%M")
 
 
@@ -94,7 +94,7 @@ data = dict(
         pipeline=test_pipeline,
     ),
 )
-
+load_from = os.path.join(work_dir, 'latest.pth')
 
 ##### model
 
