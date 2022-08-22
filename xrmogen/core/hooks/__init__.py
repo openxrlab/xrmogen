@@ -4,5 +4,5 @@ from .validation_hooks import SaveDancePKLHook, SetValPipelineHook
 from .train_hooks import PassEpochNumberToModelHook
 
 __all__ = [
-    'TestHook', 'SaveDancePKLHook', 'SetValPipelineHook', 'PassEpochNumberToModelHook', 'SaveTestDancePKLHook'
+    'SaveDancePKLHook', 'SetValPipelineHook', 'PassEpochNumberToModelHook', 'SaveTestDancePKLHook'
 ]
