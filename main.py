@@ -1,4 +1,4 @@
-from mogen.core.apis import *
+from xrmogen.core.apis import *
 
 if __name__ == '__main__':
 

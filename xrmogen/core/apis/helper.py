@@ -10,7 +10,7 @@ from mmcv.runner import (DistSamplerSeedHook, IterBasedRunner, OptimizerHook,
                          build_optimizer, get_dist_info)
 from torch.utils.data import DataLoader, RandomSampler
 
-from mogen.datasets import DistributedSampler, build_dataset
+from xrmogen.datasets import DistributedSampler, build_dataset
 
 __all__ = ['parse_args', 'build_dataloader', 'get_optimizer', 'register_hooks', \
             'get_runner']

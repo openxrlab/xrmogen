@@ -4,8 +4,8 @@ import torch
 from mmcv.parallel import MMDataParallel, MMDistributedDataParallel, collate
 from mmcv.runner import EpochBasedRunner, get_dist_info, init_dist
 
-from mogen.models.builder import build_dance_models
-from mogen.utils import get_root_logger
+from xrmogen.models.builder import build_dance_models
+from xrmogen.utils import get_root_logger
 
 from .helper import build_dataloader, get_runner, register_hooks
 
