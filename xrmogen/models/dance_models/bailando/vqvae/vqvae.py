@@ -4,7 +4,7 @@ import torch.nn as nn
 
 from .encdec import Encoder, Decoder, assert_shape
 from .bottleneck import NoBottleneck, Bottleneck
-from .utils.logger import average_metrics
+
 
 
 def dont_update(params):
@@ -201,7 +201,7 @@ class VQVAE(nn.Module):
         with t.no_grad():
             l1_loss = _loss_fn(x_target, x_out)
 
-        quantiser_metrics = average_metrics(quantiser_metrics)
+
 
         metrics.update(dict(
             recons_loss=recons_loss,
@@ -209,8 +209,7 @@ class VQVAE(nn.Module):
             commit_loss=commit_loss,
             regularization=regularization,
             velocity_loss=velocity_loss,
-            acceleration_loss=acceleration_loss,
-            **quantiser_metrics))
+            acceleration_loss=acceleration_loss))
 
         for key, val in metrics.items():
             metrics[key] = val.detach()

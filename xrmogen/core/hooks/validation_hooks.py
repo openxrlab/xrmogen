@@ -48,8 +48,7 @@ class SaveDancePKLHook(Hook):
             for key in self.dance_results:
                 mmcv.dump(self.dance_results[key].cpu().data.numpy(), os.path.join(store_dir, key + '.pkl'))
 
-            # need to manually add 1 here 
-            runner._epoch += 1
+
 
 @HOOKS.register_module()
 class SetValPipelineHook(Hook):

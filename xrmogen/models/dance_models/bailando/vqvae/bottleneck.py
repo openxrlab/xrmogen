@@ -2,7 +2,7 @@ import numpy as np
 import torch as t
 import torch.nn as nn
 import torch.nn.functional as F
-from .utils import dist_adapter as dist
+
 
 class BottleneckBlock(nn.Module):
     def __init__(self, k_bins, emb_width, mu):
@@ -34,7 +34,7 @@ class BottleneckBlock(nn.Module):
         # init k_w using random vectors from x
         y = self._tile(x)
         _k_rand = y[t.randperm(y.shape[0])][:k_bins]
-        # dist.broadcast(_k_rand, 0)
+
         self.k = _k_rand
         assert self.k.shape == (k_bins, emb_width)
         self.k_sum = self.k
@@ -64,9 +64,6 @@ class BottleneckBlock(nn.Module):
             y = self._tile(x)
             _k_rand = y[t.randperm(y.shape[0])][:k_bins]
 
-            # dist.broadcast(_k_rand, 0)
-            # dist.all_reduce(_k_sum)
-            # dist.all_reduce(_k_elem)
 
             # Update centres
             old_k = self.k
@@ -241,8 +238,3 @@ class NoBottleneck(nn.Module):
         metrics = [dict(entropy=zero, usage=zero, used_curr=zero, pn=zero, dk=zero) for _ in range(self.levels)]
         return xs, xs, commit_losses, metrics
 
-if __name__ == '__main__':
-    from jukebox.utils.dist_utils import setup_dist_from_mpi
-    rank, local_rank, device = setup_dist_from_mpi(port=29600)
-    bottleneck = Bottleneck(256, 64, 0.99, 2).to(device)
-    bottleneck.check()

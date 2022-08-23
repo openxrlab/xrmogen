@@ -1,0 +1,8 @@
+imageio==2.15.0 
+mmcv==1.6.1 
+numpy 
+opencv_python 
+Pillow 
+scipy 
+tensorboardX==2.5.1 
+tqdm

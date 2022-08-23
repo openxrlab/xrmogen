@@ -1,7 +1,10 @@
 import torch as t
 import torch.nn as nn
 from .resnet import Resnet, Resnet1D
-from .utils.torch_utils import assert_shape
+
+
+def assert_shape(x, exp_shape):
+    assert x.shape == exp_shape, f"Expected {exp_shape} got {x.shape}"
 
 class EncoderConvBlock(nn.Module):
     def __init__(self, input_emb_width, output_emb_width, down_t,

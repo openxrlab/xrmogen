@@ -2,22 +2,20 @@ from email import policy
 import os
 from datetime import datetime
 
-
-
 num_gpus = 1
 
 ## optimizer
 method = 'bailando'
-phase = 'motion vqvae'
+phase = 'gpt'
 
 # optimizer
-optimizer = dict(type='Adam', lr=3e-5, betas=[0.5, 0.999])
+optimizer = dict(type='Adam', lr=3e-4, betas=[0.5, 0.999])
 optimizer_config = dict(grad_clip=None)
 
-lr_rate = 3e-5
+lr_rate = 3e-4
 max_epochs = 500
 evalute_config = dict()
-lr_config = dict(policy='step', step=[100, 200], gamma=0.1, by_epoch=True)
+lr_config = dict(policy='step', step=[250, 400], gamma=0.1)
 checkpoint_config = dict(interval=20, by_epoch=True)
 log_level = 'INFO'
 log_config = dict(interval=10,  by_epoch=False, hooks=[dict(type='TextLoggerHook')])
@@ -42,9 +40,11 @@ test_runner = dict(type='DanceTestRunner')
 # runtime settings
 num_gpus = 1
 distributed = 0  # 是否多卡，mmcv对dp多卡支持不好，故而要么单卡要么ddp多卡
-work_dir = './bailando-vqvae/'.format(phase)  # noqa
+work_dir = './bailando_gpt/'.format(phase)  # noqa
 timestamp = datetime.now().strftime("%d-%b-%H-%M")
 
+
+load_from = os.path.join('bailando-gloabl_velocity/latest.pth')
 
 ## dataset
 
@@ -94,14 +94,14 @@ data = dict(
         pipeline=test_pipeline,
     ),
 )
-load_from = os.path.join(work_dir, 'latest.pth')
+
 
 ##### model
 
 model = dict(
     type='Bailando',
     model_config=dict(
-        bailando_phase='motion vqvae',
+        bailando_phase='global velocity',
         vqvae=dict( 
             up_half=dict(
                 levels=1,

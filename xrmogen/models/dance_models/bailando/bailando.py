@@ -102,11 +102,13 @@ class Bailando(nn.Module):
 
                 pose_seq_out, _, _ = self.vqvae(pose_seq, test_phase)
 
-                global_vel = pose_seq_out[:, :, :3].clone()
-                pose_seq_out[:, 0, :3] = 0
+                n, t, c = pose_seq_out.size()
+                pose_seq_out = pose_seq_out.view(n, t, c//3, 3)
+                global_vel = pose_seq_out[:, :, :1, :].clone()
+                pose_seq_out[:, 0, :1, :] = 0
                 for iii in range(1, pose_seq_out.size(1)):
-                    pose_seq_out[:, iii, :3] = pose_seq_out[:, iii-1, :3] + global_vel[:, iii-1, :]
-                results.append(pose_seq_out) 
+                    pose_seq_out[:, iii, :, :] = pose_seq_out[:, iii-1, :, :] + global_vel[:, iii-1, :, :]
+                results.append(pose_seq_out.view(n, t, c)) 
 
             elif test_phase == 'gpt':
                 
@@ -120,13 +122,15 @@ class Bailando(nn.Module):
                 zs = self.gpt.module.sample(x, cond=music_seq)
 
                 pose_sample = self.vqvae.module.decode(zs)
+                n, t, c = pose_sample.size()
+                pose_sample = pose_sample.view(n, t, c//3, 3)
 
-                global_vel = pose_sample[:, :, :3].clone()
-                pose_sample[:, 0, :3] = 0
+                global_vel = pose_sample[:, :, :1, :].clone()
+                pose_sample[:, 0, :1, :] = 0
                 for iii in range(1, pose_sample.size(1)):
-                    pose_sample[:, iii, :3] = pose_sample[:, iii-1, :3] + global_vel[:, iii-1, :]
+                    pose_sample[:, iii, :, :] = pose_sample[:, iii-1, :, :] + global_vel[:, iii-1, :, :]
 
-                results.append(pose_sample)
+                results.append(pose_sample.view(n, t, c))
             else:
                 raise NotImplementedError
         

@@ -4,7 +4,6 @@ import torch.nn as nn
 
 from .encdec import Encoder, Decoder, assert_shape
 from .bottleneck import NoBottleneck, Bottleneck
-from .utils.logger import average_metrics
 
 
 def dont_update(params):
@@ -225,7 +224,7 @@ class VQVAER(nn.Module):
             else:
                 this_recons_loss =_loss_fn(x_target, x_out_vel)
                 this_velocity_loss = 0
-                this_acceleration_loss +=  _loss_fn( x_out_vel[:, 1:] - x_out_vel[:, :-1], x_target[:, 1:] - x_target[:, :-1])
+                this_acceleration_loss =  _loss_fn( x_out_vel[:, 1:] - x_out_vel[:, :-1], x_target[:, 1:] - x_target[:, :-1])
 
             metrics[f'recons_loss_l{level + 1}'] = this_recons_loss
 
@@ -243,14 +242,13 @@ class VQVAER(nn.Module):
         with t.no_grad():
             l1_loss = _loss_fn(x_target, x_out_zero) if phase == 'motion vqvae' else _loss_fn(x_target, x_out_vel)
 
-        quantiser_metrics = average_metrics(quantiser_metrics)
 
         metrics.update(dict(
             recons_loss=recons_loss,
             l1_loss=l1_loss,
             velocity_loss=l1_loss,
-            acceleration_loss=acceleration_loss,
-            **quantiser_metrics))
+            acceleration_loss=acceleration_loss
+            ))
 
         for key, val in metrics.items():
             metrics[key] = val.detach()
