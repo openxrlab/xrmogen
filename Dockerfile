@@ -35,6 +35,7 @@ RUN . /root/miniconda3/etc/profile.d/conda.sh && \
     mkdir /workspace && cd /workspace && \
     git clone https://github.com/open-mmlab/mmhuman3d.git && \
     cd mmhuman3d && pip install -e . && \
+    pip install xrprimer-0.5.2-cp38-cp38-linux_x86_64.whl
     pip cache purge
 
 # install xrmogen requirements
@@ -46,6 +47,7 @@ RUN . /root/miniconda3/etc/profile.d/conda.sh && \
     pip install opencv_python && \
     pip install Pillow && \
     pip install scipy && \
-    pip install tensorboardX==2.5.1 && \
     pip install tqdm && \
+    pip install -e . && \
     pip cache purge
+    

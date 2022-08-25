@@ -25,7 +25,7 @@ def visualizeAndWritefromPKL(pkl_root, audio_path=None):
     if not os.path.exists(video_root):
         os.mkdir(video_root)
 
-    dance_names = []
+    music_names = sorted(os.listdir(audio_path))
 
     for pkl_name in tqdm(os.listdir(pkl_root), desc='Generating Videos'):
 
@@ -35,6 +35,7 @@ def visualizeAndWritefromPKL(pkl_root, audio_path=None):
         result = mmcv.load(os.path.join(pkl_root, pkl_name))
 
         np_dance = result[0]
+        print(np_dance.shape)
         
         kps3d_arr = np_dance.reshape([np_dance.shape[0], 24, 3])
        
@@ -55,25 +56,18 @@ def visualizeAndWritefromPKL(pkl_root, audio_path=None):
             keypoints=keypoints3d,
             output_path=os.path.join(video_root, pkl_name.split('.pkl')[0] + '.mp4')
         )
-        dance_names.append(pkl_name.split('.pkl')[0])
+        dance_name = pkl_name.split('.pkl')[0]
     
-
-    # video + audio
-    music_names = sorted(os.listdir(audio_path))
-    for dance in tqdm(dance_names, desc='Add Music'):
-
-        name = dance.split(".")[0]
-       
+        # video + audio
+        name = dance_name.split(".")[0]
         if 'cAll' in name:
             music_name = name[-9:-5] + '.wav'
-        
+
         if music_name in music_names:
             audio_dir_ = os.path.join(audio_path, music_name)
             name_w_audio = name + "_audio"
             cmd_audio = f"ffmpeg -i {video_root}/{name}.mp4 -i {audio_dir_} -map 0:v -map 1:a -c:v copy -shortest -y {video_root}/{name_w_audio}.mp4 -loglevel quiet"
             os.system(cmd_audio)
-
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='visulize from recorded pkl')
