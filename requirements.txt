@@ -1,0 +1,8 @@
+imageio==2.15.0 
+mmcv==1.6.1 
+numpy 
+opencv_python 
+Pillow 
+scipy 
+tqdm
+git+https://github.com/open-mmlab/mmhuman3d.git

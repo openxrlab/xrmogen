@@ -7,7 +7,7 @@ from datetime import datetime
 num_gpus = 1
 
 ## optimizer
-method = 'animatable_nerf'
+method = 'bailando'
 phase = 'motion vqvae'
 
 # optimizer
@@ -15,13 +15,13 @@ optimizer = dict(type='Adam', lr=1e-4, betas=[0.9, 0.999])
 optimizer_config = dict(grad_clip=None)
 
 lr_rate = 1e-4
-max_epochs = 10
+max_epochs = 40
 evalute_config = dict()
-lr_config = dict(policy='step', step=[2, 3], gamma=0.1, by_epoch=True)
+lr_config = dict(policy='step', step=[4, 6], gamma=0.1, by_epoch=True)
 checkpoint_config = dict(interval=1, by_epoch=True)
 log_level = 'INFO'
 log_config = dict(interval=10,  by_epoch=False, hooks=[dict(type='TextLoggerHook')])
-workflow = [('train', 2), ('val', 1)]
+workflow = [('train', 1), ('val', 1)]
 # workflow = [('val', 1)]
 # hooks
 # 'params' are numeric type value, 'variables' are variables in local environment
@@ -33,7 +33,7 @@ train_hooks = [
 ]
 
 test_hooks = [
-    dict(type='SaveDancePKLHook',
+    dict(type='SaveTestDancePKLHook',
          params=dict(save_folder='test')),
 ]
 
@@ -44,7 +44,7 @@ test_runner = dict(type='DanceTestRunner')
 # runtime settings
 num_gpus = 1
 distributed = 0  # 是否多卡，mmcv对dp多卡支持不好，故而要么单卡要么ddp多卡
-work_dir = './try_dr/'.format(phase)  # noqa
+work_dir = './dance_rev/'.format(phase)  # noqa
 timestamp = datetime.now().strftime("%d-%b-%H-%M")
 
 

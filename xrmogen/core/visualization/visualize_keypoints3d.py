@@ -1,7 +1,6 @@
 # yapf: disable
 import numpy as np
 from typing import Union
-from xrprimer.ops.projection.opencv_projector import OpencvProjector
 
 from xrmogen.data_structure.keypoints import Keypoints
 from scipy.spatial.transform import Rotation as scipy_Rotation

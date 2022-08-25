@@ -1,7 +1,6 @@
 import math
 import torch.nn as nn
-from .utils import dist_adapter as dist
-from .utils.checkpoint import checkpoint
+
 
 class ResConvBlock(nn.Module):
     def __init__(self, n_in, n_state):
@@ -61,17 +60,7 @@ class Resnet1D(nn.Module):
         if reverse_dilation:
             blocks = blocks[::-1]
         self.checkpoint_res = checkpoint_res
-        if self.checkpoint_res == 1:
-            if dist.get_rank() == 0:
-                print("Checkpointing convs")
-            self.blocks = nn.ModuleList(blocks)
-        else:
-            self.model = nn.Sequential(*blocks)
+        self.model = nn.Sequential(*blocks)
 
     def forward(self, x):
-        if self.checkpoint_res == 1:
-            for block in self.blocks:
-                x = checkpoint(block, (x, ), block.parameters(), True)
-            return x
-        else:
-            return self.model(x)
+        return self.model(x)

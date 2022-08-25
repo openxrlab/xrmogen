@@ -113,6 +113,6 @@ setup(
         'Programming Language :: Python :: 3.9',
     ],
     license='Apache License 2.0',
-    tests_require=parse_requirements('requirements/test.txt'),
-    install_requires=parse_requirements('requirements/build.txt'),
+    tests_require=parse_requirements('requirements.txt'),
+    install_requires=parse_requirements('requirements.txt'),
     zip_safe=False)

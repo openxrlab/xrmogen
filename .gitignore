@@ -17,3 +17,4 @@ __pycache__/
 *.mp4
 extra1/
 xrmogen.egg-info
+*.whl

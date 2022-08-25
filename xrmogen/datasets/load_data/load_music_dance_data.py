@@ -85,15 +85,15 @@ def load_test_data_aist(cfg):
         with open(path) as f:
 
             sample_dict = json.loads(f.read())
-            np_music = np.array(sample_dict['music_array'])
+            np_music = np.array(sample_dict['music_array']).astype(np.float32)
             if external_wav is not None: # using music features from external files
                 wav_path = os.path.join(external_wav, fname.split('_')[-2] + '.json')
                 with open(wav_path) as ff:
                     sample_dict_wav = json.loads(ff.read())
-                    np_music = np.array(sample_dict_wav['music_array'])
+                    np_music = np.array(sample_dict_wav['music_array']).astype(np.float32)
             
             if 'dance_array' in sample_dict:
-                np_dance = np.array(sample_dict['dance_array'])
+                np_dance = np.array(sample_dict['dance_array']).astype(np.float32)
                 if not rotmat:
                     root = np_dance[:, :3]  # the root
                     np_dance = np_dance - np.tile(root, (1, 24))  # Calculate relative offset with respect to root

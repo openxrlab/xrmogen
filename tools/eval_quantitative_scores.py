@@ -26,8 +26,8 @@ def calc_motion_quality(predicted_pkl_root, gt_pkl_root):
     pred_features_k = [mmcv.load(os.path.join(predicted_pkl_root, 'kinetic_features', pkl))  for pkl in os.listdir(os.path.join(predicted_pkl_root, 'kinetic_features')) if pkl.endswith('.pkl')]
     pred_features_m = [mmcv.load(os.path.join(predicted_pkl_root, 'manual_features_new', pkl)) for pkl in os.listdir(os.path.join(predicted_pkl_root, 'manual_features_new')) if pkl.endswith('.pkl')]
     
-    gt_freatures_k = [mmcv.load(os.path.join(gt_pkl_root, 'kinetic_features', pkl)) for pkl in os.listdir(os.path.join(gt_pkl_root, 'kinetic_features')) if pkl.endswith('.pkl')]
-    gt_freatures_m = [mmcv.load(os.path.join(gt_pkl_root, 'manual_features_new', pkl)) for pkl in os.listdir(os.path.join(gt_pkl_root, 'manual_features_new')) if pkl.endswith('.pkl')]
+    gt_freatures_k = [np.load(os.path.join(gt_pkl_root, 'kinetic_features', pkl)) for pkl in os.listdir(os.path.join(gt_pkl_root, 'kinetic_features')) ]
+    gt_freatures_m = [np.load(os.path.join(gt_pkl_root, 'manual_features_new', pkl)) for pkl in os.listdir(os.path.join(gt_pkl_root, 'manual_features_new')) ]
     
     
     pred_features_k = np.stack(pred_features_k)  # Nx72 p40
@@ -48,7 +48,7 @@ def calc_motion_quality(predicted_pkl_root, gt_pkl_root):
     div_m = calculate_avg_distance(pred_features_m)
 
 
-    metrics = {'FIDk': fid_k, 'FIDg': fid_m, 'DIVk': div_k, 'DIVg' : div_m}
+    metrics = {'FIDk': fid_k.real, 'FIDg': fid_m.real, 'DIVk': div_k, 'DIVg' : div_m}
     return metrics
 
 
@@ -120,18 +120,18 @@ def calc_and_save_feats(root, start=0, end=1200):
         os.mkdir(os.path.join(root, 'kinetic_features'))
     if not os.path.exists(os.path.join(root, 'manual_features_new')):
         os.mkdir(os.path.join(root, 'manual_features_new'))
-
+    # print(root)
     for pkl in os.listdir(root):
         print(pkl)
-        if os.path.isdir(os.path.join(root, pkl)):
+        if (os.path.exists(os.path.join(root, 'kinetic_features', pkl)) and  os.path.exists(os.path.join(root, 'manual_features_new', pkl))) or os.path.isdir(os.path.join(root, pkl)):
             continue
-        joint3d = mmcv.load(os.path.join(root, pkl)).reshape(-1, 72)[start:end, :]
+        joint3d = mmcv.load(os.path.join(root, pkl)).reshape(-1, 72)
 
         roott = joint3d[:1, :3]  # the root Tx72 (Tx(24x3))
         joint3d = joint3d - np.tile(roott, (1, 24))  # Calculate relative offset with respect to root
 
-        np.save(os.path.join(root, 'kinetic_features', pkl), extract_kinetic_features(joint3d.reshape(-1, 24, 3)))
-        np.save(os.path.join(root, 'manual_features_new', pkl), extract_manual_features(joint3d.reshape(-1, 24, 3)))
+        mmcv.dump(extract_kinetic_features(joint3d.reshape(-1, 24, 3)), os.path.join(root, 'kinetic_features', pkl))
+        mmcv.dump(extract_manual_features(joint3d.reshape(-1, 24, 3)), os.path.join(root, 'manual_features_new', pkl))
 
 
 def get_music_beat(music_feature_root, key, length=None):
@@ -200,11 +200,12 @@ if __name__ == '__main__':
     print('Calculating and saving features')
     calc_and_save_feats(args.pkl_root, args.start, args.end)
     calc_and_save_feats(args.gt_root, args.start, args.end)
-    metrics = calc_motion_quality(args.pkl_root, args.pkl_root)
+    metrics = calc_motion_quality(args.pkl_root, args.gt_root)
 
     # music-beat align score
     print('Calculating Music-dance beat alignment score')
     metrics.update(dict(BeatAlignScore=calc_beat_align_score(args.pkl_root, args.music_feature_root)))
     
     print('Quantitative scores:', metrics)
+    print(metrics)
     mmcv.dump(metrics, args.pkl_root + '_scores.json')

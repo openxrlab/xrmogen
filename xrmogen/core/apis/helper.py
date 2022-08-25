@@ -73,7 +73,7 @@ def register_hooks(hook_cfgs, **variables):
         return variates
 
     runner = variables['runner']
-    hook_module = importlib.import_module('mogen.core.hooks')
+    hook_module = importlib.import_module('xrmogen.core.hooks')
     for hook_cfg in hook_cfgs:
         HookClass = getattr(hook_module, hook_cfg['type'])
         runner.register_hook(
@@ -82,6 +82,6 @@ def register_hooks(hook_cfgs, **variables):
 
 
 def get_runner(runner_cfg):
-    runner_module = importlib.import_module('mogen.core.runner')
+    runner_module = importlib.import_module('xrmogen.core.runner')
     RunnerClass = getattr(runner_module, runner_cfg['type'])
     return RunnerClass
