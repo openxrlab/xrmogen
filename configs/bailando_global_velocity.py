@@ -119,6 +119,8 @@ model = dict(
                 sample_length=240,
                 use_bottleneck=True,
                 joint_channel=3,
+                acc=1.0,
+                vel=1.0,
                 vqvae_reverse_decoder_dilation=True
             ),
             down_half=dict(
@@ -137,6 +139,8 @@ model = dict(
                 sample_length=240,
                 use_bottleneck=True,
                 joint_channel=3,
+                acc=1.0,
+                vel=1.0,
                 vqvae_reverse_decoder_dilation=True
             ),
             use_bottleneck=True,
