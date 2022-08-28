@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - name: "PROJ_NAME Contributors"
+title: "PROJ_NAME: DESCRIPTION"
+date-released: DATE_RELEASED
+url: "https://github.com/openxrlab/PROJ_NAME_LOWER"
+license: Apache-2.0
