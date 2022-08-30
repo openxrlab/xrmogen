@@ -1,4 +1,4 @@
-# 上手指南
+# XRMoGen
 
 我们提供一份指南，旨在帮用户快速了解以及使用XRMoGen。
 关于安装部分的介绍，参见[installation.md](installation.md)。
@@ -22,7 +22,7 @@
 
 ## 数据集
 
-我们推荐使用预提取特征的音乐和动作数据，参见[dataset_preparation.md](dataset_preparation.md)。
+我们推荐使用预提取特征的音乐和动作数据，参见[dataset_preparation.md](docs/zh_cn/dataset_preparation.md)。
 下载后解压至$PROJECT/data。为了方便在生成舞蹈后合成有音乐的视频，建议将原始音乐（.mov）下载到同一目录的的musics文件夹下：
 
 
@@ -153,3 +153,33 @@ python tools/visualize_dance_from_pkl.py --pkl_root [生成的动作PKL文件夹
 * [configs](tutorials/config.md)
 * [data pipeline](tutorials/data_pipeline.md)
 * [model](tutorials/model.md)
+
+
+
+
+## 引用
+
+```bibtex
+@misc{xrmogen,
+    title={OpenXRLab Motion Generation Codebase},
+    author={XRMoGen Contributors},
+    howpublished = {\url{https://github.com/openxrlab/xrmogen}},
+    year={2022}
+}
+```
+
+## 致谢
+XRMoGen 是一款由学校和公司共同贡献的开源项目。我们感谢所有为项目提供算法复现和新功能支持的贡献者，以及提供宝贵反馈的用户。
+我们希望该工具箱和基准测试可以为社区提供灵活的代码工具，供用户复现现有算法并开发自己的新模型，从而不断为开源社区提供贡献。
+
+## OpenXRLab中的其他项目
+
+- [XRPrimer](https://github.com/openxrlab/xrprimer): OpenXRLab foundational library for XR-related algorithms.
+- [XRSLAM](https://github.com/openxrlab/xrslam): OpenXRLab Visual-inertial SLAM Toolbox and Benchmark.
+- [XRSfM](https://github.com/openxrlab/xrsfm): OpenXRLab Structure-from-Motion Toolbox and Benchmark.
+- [XRLocalization](https://github.com/openxrlab/xrlocalization): OpenXRLab Visual Localization Toolbox and Server.
+- [XRMoCap](https://github.com/openxrlab/xrmocap): OpenXRLab Multi-view Motion Capture Toolbox and Benchmark.
+- [XRMoGen](https://github.com/openxrlab/xrmogen): OpenXRLab Human Motion Generation Toolbox and Benchmark.
+- [XRNeRF](https://github.com/openxrlab/xrnerf): OpenXRLab Neural Radiance Field (NeRF) Toolbox and Benchmark.
+
+

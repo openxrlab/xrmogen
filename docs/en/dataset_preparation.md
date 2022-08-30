@@ -13,7 +13,7 @@ In this document we describe the data involved in XRMoGen and how to use it.
 
 ## Download Data
 
-The dataset used in the dance generation task is AIST++. It contains [original music](https://aistdancedb.ongaaccel.jp/database_download/) and motion annotations(https://google.github.io/aistplusplus_dataset/download.html). In XRMoGen, we provide extracted musical features (438 dimensions) and 3D coordinates of human key points extracted based on the SMPL model (download [here]()).
+The dataset used in the dance generation task is AIST++. It contains [original music](https://aistdancedb.ongaaccel.jp/database_download/) and motion annotations(https://google.github.io/aistplusplus_dataset/download.html). In XRMoGen, we provide extracted musical features (438 dimensions) and 3D coordinates of human key points extracted based on the SMPL model (download [here](https://openxrlab-share.oss-cn-hongkong.aliyuncs.com/xrmogen/data.zip?versionId=CAEQQBiBgMDc7aiqlxgiIDNjYTRjNWRlMzRiODQwYTNhMTZmZDdhYTZjZTIzNTg1)).
 
 
 ## Data Structure
