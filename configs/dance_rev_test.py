@@ -8,7 +8,7 @@ num_gpus = 1
 
 
 method = 'dance revolution'
-phase = 'train
+phase = 'test'
 
 # optimizer
 optimizer = dict(type='Adam', lr=1e-4, betas=[0.9, 0.999])
@@ -44,7 +44,7 @@ test_runner = dict(type='DanceTestRunner')
 # runtime settings
 num_gpus = 1
 distributed = 0  # 是否多卡，mmcv对dp多卡支持不好，故而要么单卡要么ddp多卡
-work_dir = './dance_rev/'.format(phase)  # noqa
+work_dir = './dance_rev_test/'.format(phase)  # noqa
 timestamp = datetime.now().strftime("%d-%b-%H-%M")
 
 
@@ -92,7 +92,7 @@ data = dict(
         pipeline=test_pipeline,
     ),
 )
-load_from = os.path.join(work_dir, 'epoch_15.pth')
+load_from = os.path.join('example/dance_revolution.pth')
 
 ##### model
 model = dict(

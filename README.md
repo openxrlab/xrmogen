@@ -118,10 +118,10 @@ Validation frequency is set as `workflow` of config file:
 ```
 
 ### Train
-For example, to train Bailando (Motion VQVAE phase),
+For example, to train Bailando (Dance Revolution),
 
 ```shell
-python main.py --config configs/config/bailando_motion_vqvae.py 
+python main.py --config configs/dance_rev.py 
 ```
 
 Arguments are:
@@ -129,22 +129,28 @@ Arguments are:
 
 
 ### Test
-To test relevant model, add `--test_only` tag after the config path:
+To test relevant model, add `--test_only` tag after the config path.
+We provide some pretrained weights to test (see [pretrained_model_list.md](docs/en/pretrained_model_list.md). Download the pretrained weights under a folder `./example`, and run 
 
 ```shell
-python main.py --config configs/config/bailando_motion_vqvae.py --test_only
+python main.py --config configs/bailando_test.py --test_only
 ```
+to generate the dance poses.
+The poses will be stored under the `workdir` ("./bailando_test" in this case) set in config file.
 
 To Compute the quantitative scores:
 ```python
-python tools/eval_quantitative_scores.py --pkl_root [GENERATED_DANCE_PKL_ROOT] --gt_root [GROUND_TRUTH_FEATURES=data/aist_features_zero_start] --music_feature_root [MUSIC_FEATURE_ROOT=aistpp_test_full_wav]
+python tools/eval_quantitative_scores.py --pkl_root ./bailando_test/test/epoch_0 --gt_root data/aist_features_zero_start --music_feature_root data/aistpp_test_full_wav
 
 ```
+
+The results should be aligned with [benchmark.md](docs/en/benchmark.md).
+
 
 ### Visualize
 
 ```python
-python tools/visualize_dance_from_pkl.py --pkl_root [GENERATED_DANCE_PKL_ROOT] --audio_path data/musics/
+python tools/visualize_dance_from_pkl.py --pkl_root ./bailando_test/test/epoch_0  --audio_path data/musics/
 ```
 
 

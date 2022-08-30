@@ -18,3 +18,4 @@ __pycache__/
 extra1/
 xrmogen.egg-info
 *.whl
+*ignore/

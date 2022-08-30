@@ -129,22 +129,27 @@ python main.py --config configs/config/bailando_motion_vqvae.py
 
 
 ### 测试
-测试相应的模型，只需要在config路径后添加 `--test_only`:
+测试相应的模型，只需要在config路径后添加 `--test_only`。
+我们提供一些与训练的模型权重进行测试（参见[pretrained_model_list.md](docs/zh_cn/pretrained_model_list.md)。将预训练模型下载至文件夹`./example`中，运行
 
 ```shell
-python main.py --config configs/config/bailando_motion_vqvae.py --test_only
+python main.py --config configs/bailando_test.py --test_only
 ```
+来生成舞蹈动作。所生成的舞蹈将以.pkl格式存于config文件中所设置的`workdir`下（在本例中是"./bailando_test"）。
+
 
 对生成的舞蹈动作计算量化指标：
 ```python
-python tools/eval_quantitative_scores.py --pkl_root [生成的动作PKL文件夹] --gt_root data/aist_features_zero_start --music_feature_root data/aistpp_test_full_wav
+python tools/eval_quantitative_scores.py --pkl_root ./bailando_test/test/epoch_0 --gt_root data/aist_features_zero_start --music_feature_root data/aistpp_test_full_wav
 
 ```
+
+测试结果应和[benchmark.md](docs/zh_cn/benchmark.md)相吻合。
 
 ### 可视化
 
 ```python
-python tools/visualize_dance_from_pkl.py --pkl_root [生成的动作PKL文件夹] --audio_path data/musics/
+python tools/visualize_dance_from_pkl.py --pkl_root ./bailando_test/test/epoch_0 --audio_path data/musics/
 ```
 
 
