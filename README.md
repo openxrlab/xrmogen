@@ -1,7 +1,14 @@
 # XRMoGen
 English | [简体中文](README_CN.md)
 
-We provide this getting-start instruction to help users be familiar to the code fast. For environment settings, see [installation.md](docs/en/installation.md)。
+XRMoGen is a codebase for motion generation.
+Currently, it contains two dance generation algorithms
+
+- Bailando: Siyao *et al.*, Bailando: 3D Dance Generation by Actor-Critic GPT with Choreographic Memory, CVPR 2022
+- DanceRevolution: Huang *et al.*, Dance Revolution: Long-Term Dance Generation with Music via Curriculum Learning, ICLR 2021
+
+
+ For environment settings, see [installation.md](docs/en/installation.md)。
 
 
 <!-- TOC -->
@@ -9,7 +16,6 @@ We provide this getting-start instruction to help users be familiar to the code 
 - [Getting Started](#getting-started)
   - [Datasets](#datasets)
   - [Build a Model](#build-a-model)
-    - [XRMoGen Composition](#xrmogen-composition)
     - [Write a new dance generation model](#write-a-new-dance-generation-model)
   - [Train a Model](#train-a-model)
     - [Iteration Controls](#epoch-controls)
@@ -42,19 +48,10 @@ xrmogen
 
 ## Build a Model
 
-### XRMoGen Composition
-
-Currently, XRMoGen contains two dance generation algorithms
-
-- Bailando: Siyao *et al.*, Bailando: 3D Dance Generation by Actor-Critic GPT with Choreographic Memory, CVPR 2022
-- DanceRevolution: Huang *et al.*, Dance Revolution: Long-Term Dance Generation with Music via Curriculum Learning, ICLR 2021
-
-
-The model structure can be customized through config files.
 
 ### Write a new dance generation model
 
-To implement a new method, your model need to contain following functions/medhotds to fit the training/test pipeline:
+The model structure can be customized through config files. To implement a new method, your model need to contain following functions/medhotds to fit the training/test pipeline:
 
 
 - `train_step()`: forward method of the training mode.

@@ -1,6 +1,13 @@
 # XRMoGen
 
-我们提供一份指南，旨在帮用户快速了解以及使用XRMoGen。
+XRMoGen 是一个开源的动作生成代码库。
+目前，XRMoGen中包含以下两种舞蹈生成的方法：
+
+- Bailando: Siyao *et al.*, Bailando: 3D Dance Generation by Actor-Critic GPT with Choreographic Memory, CVPR 2022
+- DanceRevolution: Huang *et al.*, Dance Revolution: Long-Term Dance Generation with Music via Curriculum Learning, ICLR 2021
+
+
+
 关于安装部分的介绍，参见[installation.md](docs/zh_cn/installation.md)。
 
 
@@ -9,7 +16,6 @@
 - [上手指南](#上手指南)
   - [数据集](#数据集)
   - [构建模型](#构建模型)
-    - [XRMoGen 构成](#xrmogen-构成)
     - [如何构建新的模型](#如何构建新的模型)
   - [模型训练](#模型训练)
     - [Epoch 控制](#epoch-控制)
@@ -42,13 +48,6 @@ xrmogen
 
 
 ## 构建模型
-
-### XRMoGen 构成
-
-目前，XRMoGen中包含以下两种舞蹈生成的方法：
-
-- Bailando: Siyao *et al.*, Bailando: 3D Dance Generation by Actor-Critic GPT with Choreographic Memory, CVPR 2022
-- DanceRevolution: Huang *et al.*, Dance Revolution: Long-Term Dance Generation with Music via Curriculum Learning, ICLR 2021
 
 
 模型结构由配置文件（config）来控制。
