@@ -8,7 +8,9 @@ Currently, it contains two dance generation algorithms
 - DanceRevolution: Huang *et al.*, Dance Revolution: Long-Term Dance Generation with Music via Curriculum Learning, ICLR 2021
 
 
- For environment settings, see [installation.md](docs/en/installation.md)。
+ For environment settings, see [installation.md](docs/en/installation.md).
+
+ 
 
 
 <!-- TOC -->
