@@ -1,7 +1,7 @@
 # XRMoGen
 
 我们提供一份指南，旨在帮用户快速了解以及使用XRMoGen。
-关于安装部分的介绍，参见[installation.md](installation.md)。
+关于安装部分的介绍，参见[installation.md](docs/zh_cn/installation.md)。
 
 
 <!-- TOC -->

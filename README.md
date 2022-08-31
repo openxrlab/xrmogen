@@ -22,7 +22,7 @@ We provide this getting-start instruction to help users be familiar to the code 
 
 ## Datasets
 
-We recommend using pre-extracted features for music and motion data, see [dataset_preparation.md](dataset_preparation.md).
+We recommend using pre-extracted features for music and motion data, see [dataset_preparation.md](docs/en/dataset_preparation.md).
 After downloading, extract it to $PROJECT/data. In order to facilitate the synthesis of a video with music after the dance is generated, it is needed to download the original music (.mov) to the musics folder in the same directory:
 
 ```
