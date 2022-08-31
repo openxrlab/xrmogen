@@ -40,9 +40,9 @@ jobs:
           # pip install torch numpy mmcv -i https://pypi.tuna.tsinghua.edu.cn/simple
           # pip install opencv-python>=3 yapf imageio scikit-image -i https://pypi.tuna.tsinghua.edu.cn/simple
 
-          coverage run --source xrmogen/models -m pytest -s test/models 
-          coverage xml
-          coverage report -m
+          # coverage run --source xrmogen/models -m pytest -s test/models 
+          # coverage xml
+          # coverage report -m
       - name: Upload coverage to Codecov # 上传覆盖率报告
         uses: codecov/codecov-action@v2
         with:
