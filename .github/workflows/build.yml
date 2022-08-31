@@ -1,76 +1,49 @@
 # This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
+ 
 name: build
 
 on:
-  push:
+  push: # 触发条件之一为push到main分支，若改动仅存在于docs目录，或README.md文件，则忽略，避免触发。
     branches:
      - main
+     - alpha_test
     paths-ignore:
       - 'README.md'
       - 'README_CN.md'
       - 'docs/**'
-
-  pull_request:
+ 
+  pull_request: # 触发条件之一为该commit属于某个PR，忽略条件同上。
     paths-ignore:
       - 'README.md'
       - 'README_CN.md'
       - 'docs/**'
-
+ 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
+ 
 jobs:
-  build_cuda101:
+  build_test:
     runs-on: ubuntu-18.04
-    strategy:
-      matrix:
-        python-version: [3.7]
-        torch: [1.7.0, 1.8.0]
-        include:
-          - torch: 1.7.0
-            torchvision: 0.8.1
-          - torch: 1.8.0
-            torchvision: 0.9.0
-    defaults:
-      run:
-        shell: bash -l {0}
-
     steps:
       - uses: actions/checkout@v2
-      - uses: conda-incubator/setup-miniconda@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
         with:
-          activate-environment: PROJ_NAME_LOWER_env
-          python-version: ${{matrix.python-version}}
-          auto-activate-base: false
-      - name: Prepare test data
+          python-version: 3.8
+      - name: Install Env
         run: |
-          # TODO: prepare test data or remove this step
-      - name: Upgrade pip
-        run: pip install pip --upgrade
-      - name: Install ffmpeg
-        run: |
-          conda install ffmpeg
-          ffmpeg -version
-      - name: Install PyTorch
-        run: |
-          conda install pytorch==${{matrix.torch}} torchvision==${{matrix.torchvision}} cudatoolkit=10.1 -c pytorch
-      - name: Install MMCV
-        run: |
-          pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cpu/torch${{matrix.torch}}/index.html
-          python -c 'import mmcv; print(mmcv.__version__)'
-      - name: Install other dependencies
-        run: pip install -r requirements.txt
-      - name: Build and install
-        run: rm -rf .eggs && pip install -e .
-      - name: Run unittests and generate coverage report
-        run: |
-          coverage run --source PROJ_NAME_LOWER -m pytest tests/
+          pip install coverage pytest
+          pip install torch==1.7.1
+          # pip install lpips trimesh smplx -i https://pypi.tuna.tsinghua.edu.cn/simple
+          # pip install torch numpy mmcv -i https://pypi.tuna.tsinghua.edu.cn/simple
+          # pip install opencv-python>=3 yapf imageio scikit-image -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+          coverage run --source xrmogen/models -m pytest -s test/models 
           coverage xml
           coverage report -m
-      - name: Upload coverage to Codecov
+      - name: Upload coverage to Codecov # 上传覆盖率报告
         uses: codecov/codecov-action@v2
         with:
           files: ./coverage.xml

@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.7
+      - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
-          python-version: 3.7
+          python-version: 3.8
       - name: Install pre-commit hook
         run: |
           sudo apt-add-repository ppa:brightbox/ruby-ng -y
@@ -23,8 +23,8 @@ jobs:
           pip install pre-commit
           pre-commit install
       - name: Linting
-        run: pre-commit run --all-files
+        run: pre-commit run --files xrmogen/*
       - name: Check docstring coverage
         run: |
           pip install interrogate
-          interrogate -vinmMI --ignore-init-method --ignore-module --ignore-nested-functions --ignore-regex "__repr__" -f 60 PROJ_NAME_LOWER/
+          interrogate -vinmMI --ignore-init-method --ignore-module --ignore-nested-functions --ignore-regex "__repr__" -f 60 xrmogen/core
