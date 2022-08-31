@@ -125,7 +125,7 @@ def calc_and_save_feats(root, start=0, end=1200):
         print(pkl)
         if (os.path.exists(os.path.join(root, 'kinetic_features', pkl)) and  os.path.exists(os.path.join(root, 'manual_features_new', pkl))) or os.path.isdir(os.path.join(root, pkl)):
             continue
-        joint3d = mmcv.load(os.path.join(root, pkl)).reshape(-1, 72)
+        joint3d = mmcv.load(os.path.join(root, pkl)).reshape(-1, 72)[start:end,:]
 
         roott = joint3d[:1, :3]  # the root Tx72 (Tx(24x3))
         joint3d = joint3d - np.tile(roott, (1, 24))  # Calculate relative offset with respect to root

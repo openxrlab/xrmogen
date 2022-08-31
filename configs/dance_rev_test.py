@@ -51,7 +51,7 @@ timestamp = datetime.now().strftime("%d-%b-%H-%M")
 ## dataset
 
 traindata_cfg = dict( 
-    data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_train_wav',
+    data_dir='data/aistpp_train_wav',
     rotmat=False,
     seq_len=240,
     mode='train',
@@ -59,7 +59,7 @@ traindata_cfg = dict(
 )
 
 testdata_cfg = dict( 
-    data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_test_full_wav',
+    data_dir='data/aistpp_test_full_wav',
     rotmat=False,
     mode='test',
     move=1
@@ -92,7 +92,7 @@ data = dict(
         pipeline=test_pipeline,
     ),
 )
-load_from = os.path.join('example/dance_revolution.pth')
+load_from = os.path.join('./example/dance_revolution.pth')
 
 ##### model
 model = dict(

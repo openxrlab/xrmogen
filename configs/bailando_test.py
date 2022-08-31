@@ -44,26 +44,26 @@ work_dir = './bailando_test/'.format(phase)  # noqa
 timestamp = datetime.now().strftime("%d-%b-%H-%M")
 
 
-load_from = os.path.join('bailando.pth')
+load_from = os.path.join('./example/bailando.pth')
 
 ## dataset
 
 traindata_cfg = dict( 
-    data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_train_wav',
+    data_dir='data/aistpp_train_wav',
     rotmat=False,
     seq_len=240,
     mode='train',
     move=8,
-    external_wav='/mnt/lustre/syli/dance/Bailando/data/aistpp_music_feat_7.5fps',
+    external_wav='data/aistpp_music_feat_7.5fps',
     external_wav_rate=8
 )
 
 testdata_cfg = dict( 
-    data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_test_full_wav',
+    data_dir='data/aistpp_test_full_wav',
     rotmat=False,
     mode='test',
     move=8,
-    external_wav='/mnt/lustre/syli/dance/Bailando/data/aistpp_music_feat_7.5fps',
+    external_wav='data/aistpp_music_feat_7.5fps',
     external_wav_rate=8
 )
 
@@ -101,7 +101,7 @@ data = dict(
 model = dict(
     type='Bailando',
     model_config=dict(
-        bailando_phase='global velocity',
+        bailando_phase='gpt',
         vqvae=dict( 
             up_half=dict(
                 levels=1,

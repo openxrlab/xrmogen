@@ -140,7 +140,7 @@ python main.py --config configs/bailando_test.py --test_only
 
 对生成的舞蹈动作计算量化指标：
 ```python
-python tools/eval_quantitative_scores.py --pkl_root ./bailando_test/test/epoch_0 --gt_root data/aist_features_zero_start --music_feature_root data/aistpp_test_full_wav
+python tools/eval_quantitative_scores.py --pkl_root ./bailando_test/test/epoch0 --gt_root data/aist_features_zero_start --music_feature_root data/aistpp_test_full_wav
 
 ```
 
@@ -149,7 +149,7 @@ python tools/eval_quantitative_scores.py --pkl_root ./bailando_test/test/epoch_0
 ### 可视化
 
 ```python
-python tools/visualize_dance_from_pkl.py --pkl_root ./bailando_test/test/epoch_0 --audio_path data/musics/
+python tools/visualize_dance_from_pkl.py --pkl_root ./bailando_test/test/epoch0 --audio_path data/musics/
 ```
 
 

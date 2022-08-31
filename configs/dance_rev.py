@@ -8,7 +8,7 @@ num_gpus = 1
 
 
 method = 'dance revolution'
-phase = 'train
+phase = 'train'
 
 # optimizer
 optimizer = dict(type='Adam', lr=1e-4, betas=[0.9, 0.999])
@@ -51,7 +51,7 @@ timestamp = datetime.now().strftime("%d-%b-%H-%M")
 ## dataset
 
 traindata_cfg = dict( 
-    data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_train_wav',
+    data_dir='data/aistpp_train_wav',
     rotmat=False,
     seq_len=240,
     mode='train',
@@ -59,7 +59,7 @@ traindata_cfg = dict(
 )
 
 testdata_cfg = dict( 
-    data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_test_full_wav',
+    data_dir='data/aistpp_test_full_wav',
     rotmat=False,
     mode='test',
     move=1

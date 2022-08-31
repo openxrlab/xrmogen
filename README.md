@@ -140,7 +140,7 @@ The poses will be stored under the `workdir` ("./bailando_test" in this case) se
 
 To Compute the quantitative scores:
 ```python
-python tools/eval_quantitative_scores.py --pkl_root ./bailando_test/test/epoch_0 --gt_root data/aist_features_zero_start --music_feature_root data/aistpp_test_full_wav
+python tools/eval_quantitative_scores.py --pkl_root ./bailando_test/test/epoch0 --gt_root data/aist_features_zero_start --music_feature_root data/aistpp_test_full_wav
 
 ```
 
@@ -150,7 +150,7 @@ The results should be aligned with [benchmark.md](docs/en/benchmark.md).
 ### Visualize
 
 ```python
-python tools/visualize_dance_from_pkl.py --pkl_root ./bailando_test/test/epoch_0  --audio_path data/musics/
+python tools/visualize_dance_from_pkl.py --pkl_root ./bailando_test/test/epoch0  --audio_path data/musics/
 ```
 
 

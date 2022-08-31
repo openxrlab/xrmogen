@@ -109,17 +109,17 @@ class Bailando(nn.Module):
                 results.append(pose_seq_out) 
 
             elif test_phase == 'gpt':
-                
-                quants = self.vqvae.module.encode(pose_seq)
+                pose_seq[:, :, :3] = 0
+                quants = self.vqvae.encode(pose_seq)
 
                 if isinstance(quants, tuple):
                     x = tuple(quants[i][0][:, :1].clone() for i in range(len(quants)))
                 else:
                     x = quants[0][:, :1].clone()
 
-                zs = self.gpt.module.sample(x, cond=music_seq)
+                zs = self.gpt.sample(x, cond=music_seq[:, 1:])
 
-                pose_sample = self.vqvae.module.decode(zs)
+                pose_sample = self.vqvae.decode(zs)
 
                 global_vel = pose_sample[:, :, :3].clone()
                 pose_sample[:, 0, :3] = 0

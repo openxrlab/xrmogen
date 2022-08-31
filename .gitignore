@@ -19,3 +19,5 @@ extra1/
 xrmogen.egg-info
 *.whl
 *ignore/
+example/
+data/
