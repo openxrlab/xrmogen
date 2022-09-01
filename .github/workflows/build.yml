@@ -4,16 +4,15 @@
 name: build
 
 on:
-  push: # 触发条件之一为push到main分支，若改动仅存在于docs目录，或README.md文件，则忽略，避免触发。
+  push: 
     branches:
      - main
-     - alpha_test
     paths-ignore:
       - 'README.md'
       - 'README_CN.md'
       - 'docs/**'
  
-  pull_request: # 触发条件之一为该commit属于某个PR，忽略条件同上。
+  pull_request:
     paths-ignore:
       - 'README.md'
       - 'README_CN.md'
@@ -43,7 +42,7 @@ jobs:
           # coverage run --source xrmogen/models -m pytest -s test/models 
           # coverage xml
           # coverage report -m
-      - name: Upload coverage to Codecov # 上传覆盖率报告
+      - name: Upload coverage to Codecov 
         uses: codecov/codecov-action@v2
         with:
           files: ./coverage.xml

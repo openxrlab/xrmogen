@@ -90,7 +90,7 @@ To be specific, if we want to implement a new model, there are several things to
             ....
     ```
 
-2. Import the model in `mogen/models/__init__.py`
+2. import the model in `mogen/models/__init__.py`
 
     ```python
     from .my_model import MyDanceModel

@@ -43,7 +43,7 @@ test_runner = dict(type='DanceTestRunner')
 
 # runtime settings
 num_gpus = 1
-distributed = 0  # 是否多卡，mmcv对dp多卡支持不好，故而要么单卡要么ddp多卡
+distributed = 0  # multi-gpu
 work_dir = './dance_rev/'.format(phase)  # noqa
 timestamp = datetime.now().strftime("%d-%b-%H-%M")
 
