@@ -73,19 +73,19 @@ test_pipeline = [
 ]
 
 data = dict(
-    train_loader=dict(batch_size=32, num_workers=8),
+    train_loader=dict(batch_size=32, num_workers=0),
     train=dict(
         type='AISTppDataset',
         data_config=traindata_cfg,
         pipeline=train_pipeline,
     ),
-    val_loader=dict(batch_size=1, num_workers=8),
+    val_loader=dict(batch_size=1, num_workers=0),
     val=dict(
         type='AISTppDataset',
         data_config=testdata_cfg,
         pipeline=test_pipeline,
     ),
-    test_loader=dict(batch_size=1, num_workers=8),
+    test_loader=dict(batch_size=1, num_workers=0),
     test=dict(
         type='AISTppDataset',
         data_config=testdata_cfg,
