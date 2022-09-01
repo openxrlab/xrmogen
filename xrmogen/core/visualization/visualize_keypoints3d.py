@@ -1,9 +1,9 @@
 # yapf: disable
 import numpy as np
+from scipy.spatial.transform import Rotation as scipy_Rotation
 from typing import Union
 
 from xrmogen.data_structure.keypoints import Keypoints
-from scipy.spatial.transform import Rotation as scipy_Rotation
 
 try:
     from mmhuman3d.core.visualization.visualize_keypoints3d import (
@@ -52,8 +52,7 @@ def visualize_keypoints3d(
     keypoints_np = keypoints.to_numpy()
     kps3d = keypoints_np.get_keypoints()[..., :3].copy()
     rotation = scipy_Rotation.from_euler('zxy', [180, 0, 180], degrees=True)
-    kps3d = rotation.apply(
-        kps3d.reshape(-1, 3)).reshape(
+    kps3d = rotation.apply(kps3d.reshape(-1, 3)).reshape(
         keypoints_np.get_frame_number(), keypoints_np.get_person_number(),
         keypoints_np.get_keypoints_number(), 3)
     if keypoints_np.get_person_number() == 1:

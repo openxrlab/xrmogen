@@ -4,7 +4,6 @@ import numpy as np
 import torch
 from typing import Any, Union
 from xrprimer.utils.log_utils import get_logger
-
 from xrprimer.utils.path_utils import (
     Existence, check_path_existence, check_path_suffix,
 )

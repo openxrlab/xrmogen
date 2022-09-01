@@ -1,8 +1,7 @@
-# Pretrained model weights 
+# Pretrained model weights
 
 | model | weight link |
-| :----------------: | :------------------------: | 
+| :----------------: | :------------------------: |
 | Bailando | [bailando.pth](https://openxrlab-share.oss-cn-hongkong.aliyuncs.com/xrmogen/weights/bailando.pth) |
 | DanceRevolution | [dance_revolution.pth](https://openxrlab-share.oss-cn-hongkong.aliyuncs.com/xrmogen/weights/dance_revolution.pth)
 |
-

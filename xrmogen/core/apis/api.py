@@ -1,4 +1,5 @@
 from mmcv import Config
+
 from .test import test_mogen
 from .train import train_mogen
 

@@ -63,7 +63,7 @@ The model structure can be customized through config files. To implement a new m
 
 - `train_step()`: forward method of the training mode.
 - `val_step()`: forward method of the testing mode.
-- regestered as a dance model
+- registered as a dance model
 
 
 To be specific, if we want to implement a new model, there are several things to do.
@@ -79,7 +79,7 @@ To be specific, if we want to implement a new model, there are several things to
 
         def __init__(self, model_config):
             super().__init__()
-        
+
         def forward(self, ...):
             ....
 
@@ -113,7 +113,7 @@ To be specific, if we want to implement a new model, there are several things to
 
 XRMoGen uses `mmcv.runner.EpochBasedRunner` to control training and test.
 
-In the training mode, the `max_epochs` in config file decide how many epochs to train. 
+In the training mode, the `max_epochs` in config file decide how many epochs to train.
 In test mode, `max_epochs` is forced to change to 1, which represents only 1 epoch to test.
 
 Validation frequency is set as `workflow` of config file:
@@ -125,7 +125,7 @@ Validation frequency is set as `workflow` of config file:
 For example, to train Bailando (Dance Revolution),
 
 ```shell
-python main.py --config configs/dance_rev.py 
+python main.py --config configs/dance_rev.py
 ```
 
 Arguments are:
@@ -134,7 +134,7 @@ Arguments are:
 
 ### Test
 To test relevant model, add `--test_only` tag after the config path.
-We provide some pretrained weights to test (see [pretrained_model_list.md](docs/en/pretrained_model_list.md). Download the pretrained weights under a folder `./example`, and run 
+We provide some pretrained weights to test (see [pretrained_model_list.md](docs/en/pretrained_model_list.md). Download the pretrained weights under a folder `./example`, and run
 
 ```shell
 python main.py --config configs/bailando_test.py --test_only
@@ -201,4 +201,3 @@ We wish that the framework and benchmark could serve the growing research commun
 - [XRMoCap](https://github.com/openxrlab/xrmocap): OpenXRLab Multi-view Motion Capture Toolbox and Benchmark.
 - [XRMoGen](https://github.com/openxrlab/xrmogen): OpenXRLab Human Motion Generation Toolbox and Benchmark.
 - [XRNeRF](https://github.com/openxrlab/xrnerf): OpenXRLab Neural Radiance Field (NeRF) Toolbox and Benchmark.
-

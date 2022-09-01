@@ -1,9 +1,4 @@
-import numpy as np
-import torch
-from mmcv.parallel import collate
-from mmcv.runner import get_dist_info
-from mmcv.utils import Registry, build_from_cfg, digit_version
-from torch.utils.data import DataLoader
+from mmcv.utils import Registry, build_from_cfg
 
 DATASETS = Registry('dataset')
 PIPELINES = Registry('pipeline')

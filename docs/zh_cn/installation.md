@@ -16,7 +16,7 @@
   <!-- - [安装验证](#安装验证) -->
 
 <!-- TOC -->
-<!-- 
+<!--
 ## 安装依赖包
 
 - Linux
@@ -37,7 +37,7 @@
 
 
 ## 准备环境
-<!-- 
+<!--
 #### a. 安装系统依赖库.
 
 ```shell
@@ -54,7 +54,7 @@ conda install ffmpeg -y
 
 #### b. 安装 PyTorch 和 torchvision
 
-1. 查看pytorch-cuda版本匹配表，选择合适的版本 [here](https://pytorch.org/get-started/previous-versions/) 
+1. 查看pytorch-cuda版本匹配表，选择合适的版本 [here](https://pytorch.org/get-started/previous-versions/)
 2. 用对应`conda install` 命令安装对应版本的PyTorch以及Torchvision。
 
 ```
@@ -77,9 +77,9 @@ pip install -e .
 <!-- * 根据[官方说明](https://mmcv.readthedocs.io/en/latest/get_started/installation.html)，安装 ```mmcv-full```
 * 安装 ```spconv```, 比如 ```pip install spconv-cu111```. 值得注意的是只有部分cuda版本是支持的, 具体请查看 [官方说明](https://github.com/traveller59/spconv)
 * 通过 ```pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"``` 安装 ```pytorch3d```
-* 通过 ```pip install git+https://github.com/NVlabs/tiny-cuda-nn/#subdirectory=bindings/torch``` 安装 ```tcnn``` 
+* 通过 ```pip install git+https://github.com/NVlabs/tiny-cuda-nn/#subdirectory=bindings/torch``` 安装 ```tcnn```
 * 查看[官方说明](https://github.com/creiser/kilonerf#option-b-build-cuda-extension-yourself) 安装 ```kilo-cuda``` -->
-  
+
 <!-- #### e. 安装cuda扩展
 * 为了支持instant-ngp算法，需要编译安装cuda扩展 ```raymarch```, 查看[具体教程](../../extensions/ngp_raymarch/README.md) -->
 
@@ -107,7 +107,7 @@ docker cp ProjectPath/xrmogen [DOCKER_ID]:/workspace
 ```
 docker ps -a
 ```
-  
+
 <!-- ## 安装验证
 
 为了验证 XRNerf 和所需的依赖包是否已经安装成功，可以运行单元测试模块
@@ -116,8 +116,7 @@ docker ps -a
 coverage run --source xrnerf/models -m pytest -s test/models && coverage report -m
 ```
 
-注意，运行单元测试模块前需要额外安装 ```coverage``` 和 ```pytest``` 
+注意，运行单元测试模块前需要额外安装 ```coverage``` 和 ```pytest```
 ```
 pip install coverage pytest -i https://pypi.tuna.tsinghua.edu.cn/simple
 ``` -->
-

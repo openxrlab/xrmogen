@@ -58,7 +58,7 @@ To implement a new method, your model need to contain following functions/medhot
 
 - `train_step()`: forward method of the training mode.
 - `val_step()`: forward method of the testing mode.
-- regestered as a dance model
+- registered as a dance model
 
 
 To be specific, if we want to implement a new model, there are several things to do.
@@ -74,7 +74,7 @@ To be specific, if we want to implement a new model, there are several things to
 
         def __init__(self, model_config):
             super().__init__()
-        
+
         def forward(self, ...):
             ....
 
@@ -108,7 +108,7 @@ To be specific, if we want to implement a new model, there are several things to
 
 XRMoGen uses `mmcv.runner.EpochBasedRunner` to control training and test.
 
-In the training mode, the `max_epochs` in config file decide how many epochs to train. 
+In the training mode, the `max_epochs` in config file decide how many epochs to train.
 In test mode, `max_epochs` is forced to change to 1, which represents only 1 epoch to test.
 
 Validation frequency is set as `workflow` of config file:
@@ -120,7 +120,7 @@ Validation frequency is set as `workflow` of config file:
 For example, to train Bailando (Motion VQVAE phase),
 
 ```shell
-python main.py --config configs/config/bailando_motion_vqvae.py 
+python main.py --config configs/config/bailando_motion_vqvae.py
 ```
 
 Arguments are:

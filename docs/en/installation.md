@@ -11,14 +11,14 @@ We provide some tips for XRMoGen installation in this file.
   - [Prepare environment](#prepare-environment)
       - [a. Create a conda virtual environment and activate it.](#a-create-a-conda-virtual-environment-and-activate-it)
       - [b. Install PyTorch and torchvision](#b-install-pytorch-and-torchvision)
-      
+
       - [c. Install MMHuman3D](#c-install-mmhuman3d)
       - [d. Install Other Needed Python Packages](#d-install-other-needed-python-packages)
   - [Another option: Docker Image](#another-option-docker-image)
 
 
 <!-- TOC -->
-<!-- 
+<!--
 ## 安装依赖包
 
 - Linux
@@ -39,7 +39,7 @@ We provide some tips for XRMoGen installation in this file.
 
 
 ## Prepare Environment
-<!-- 
+<!--
 #### a. 安装系统依赖库.
 
 ```shell
@@ -56,7 +56,7 @@ conda install ffmpeg -y
 
 #### b. Install PyTorch and torchvision
 
-1. Check the version of pytorch-cuda，and select a suitable on at [here](https://pytorch.org/get-started/previous-versions/) 
+1. Check the version of pytorch-cuda，and select a suitable on at [here](https://pytorch.org/get-started/previous-versions/)
 2. Use the  `conda install` command for corresponding version to install PyTorch and Torchvision.
 
 ```
@@ -79,9 +79,9 @@ pip install -e .
 <!-- * 根据[官方说明](https://mmcv.readthedocs.io/en/latest/get_started/installation.html)，安装 ```mmcv-full```
 * 安装 ```spconv```, 比如 ```pip install spconv-cu111```. 值得注意的是只有部分cuda版本是支持的, 具体请查看 [官方说明](https://github.com/traveller59/spconv)
 * 通过 ```pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"``` 安装 ```pytorch3d```
-* 通过 ```pip install git+https://github.com/NVlabs/tiny-cuda-nn/#subdirectory=bindings/torch``` 安装 ```tcnn``` 
+* 通过 ```pip install git+https://github.com/NVlabs/tiny-cuda-nn/#subdirectory=bindings/torch``` 安装 ```tcnn```
 * 查看[官方说明](https://github.com/creiser/kilonerf#option-b-build-cuda-extension-yourself) 安装 ```kilo-cuda``` -->
-  
+
 <!-- #### e. 安装cuda扩展
 * 为了支持instant-ngp算法，需要编译安装cuda扩展 ```raymarch```, 查看[具体教程](../../extensions/ngp_raymarch/README.md) -->
 
@@ -108,7 +108,7 @@ where [DOCKER_ID] is the docker id that can be obtained by
 ```
 docker ps -a
 ```
-  
+
 <!-- ## 安装验证
 
 为了验证 XRNerf 和所需的依赖包是否已经安装成功，可以运行单元测试模块
@@ -117,8 +117,7 @@ docker ps -a
 coverage run --source xrnerf/models -m pytest -s test/models && coverage report -m
 ```
 
-注意，运行单元测试模块前需要额外安装 ```coverage``` 和 ```pytest``` 
+注意，运行单元测试模块前需要额外安装 ```coverage``` 和 ```pytest```
 ```
 pip install coverage pytest -i https://pypi.tuna.tsinghua.edu.cn/simple
 ``` -->
-
