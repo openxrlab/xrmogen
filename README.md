@@ -1,6 +1,8 @@
 # XRMoGen
 English | [简体中文](README_CN.md)
 
+https://user-images.githubusercontent.com/81355712/187817864-37c984a5-032d-492b-8314-493a23c27e5e.mp4
+
 XRMoGen is a codebase for motion generation.
 Currently, it contains two dance generation algorithms
 
@@ -10,7 +12,7 @@ Currently, it contains two dance generation algorithms
 
  For environment settings, see [installation.md](docs/en/installation.md).
 
- 
+
 
 
 <!-- TOC -->

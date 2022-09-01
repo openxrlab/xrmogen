@@ -1,5 +1,7 @@
 # XRMoGen
 
+https://user-images.githubusercontent.com/81355712/187817864-37c984a5-032d-492b-8314-493a23c27e5e.mp4
+
 XRMoGen 是一个开源的动作生成代码库。
 目前，XRMoGen中包含以下两种舞蹈生成的方法：
 
