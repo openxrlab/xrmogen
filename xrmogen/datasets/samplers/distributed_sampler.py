@@ -9,6 +9,7 @@ class DistributedSampler(_DistributedSampler):
     In pytorch of lower versions, there is no ``shuffle`` argument. This child
     class will port one to DistributedSampler.
     """
+
     def __init__(self,
                  dataset,
                  num_replicas=None,

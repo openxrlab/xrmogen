@@ -1,15 +1,10 @@
-
-import math
-import logging
-
 import torch
 import torch.nn as nn
-from torch.nn import functional as F
-from .vqvae.sep_vqvae_root import SepVQVAER
-from .gpt.cross_cond_gpt import CrossCondGPT
-
 
 from ...builder import DANCE_MODELS
+from .gpt.cross_cond_gpt import CrossCondGPT
+from .vqvae.sep_vqvae_root import SepVQVAER
+
 
 @DANCE_MODELS.register_module()
 class Bailando(nn.Module):
@@ -19,13 +14,13 @@ class Bailando(nn.Module):
         self.bailando_phase = model_config['bailando_phase']
         self.vqvae = SepVQVAER(model_config.vqvae)
         self.gpt = CrossCondGPT(model_config.gpt)
-        
+
         # self.val_results = {}
-    
+
     def train_step(self, data, optimizer, **kwargs):
         train_phase = self.bailando_phase
 
-        music_seq, pose_seq  = data['music'], data['dance'] 
+        music_seq, pose_seq = data['music'], data['dance']
 
         optimizer.zero_grad()
 
@@ -49,8 +44,12 @@ class Bailando(nn.Module):
             with torch.no_grad():
                 quants_pred = self.vqvae.encode(pose_seq)
                 if isinstance(quants_pred, tuple):
-                    quants_input = tuple(quants_pred[ii][0][:, :-1].clone().detach() for ii in range(len(quants_pred)))
-                    quants_target = tuple(quants_pred[ii][0][:, 1:].clone().detach() for ii in range(len(quants_pred)))
+                    quants_input = tuple(
+                        quants_pred[ii][0][:, :-1].clone().detach()
+                        for ii in range(len(quants_pred)))
+                    quants_target = tuple(
+                        quants_pred[ii][0][:, 1:].clone().detach()
+                        for ii in range(len(quants_pred)))
                 else:
                     quants = quants_pred[0]
                     quants_input = quants[:, :-1].clone().detach()
@@ -61,14 +60,8 @@ class Bailando(nn.Module):
         else:
             raise NotImplementedError
 
-        stats = {
-            'loss': loss.item()
-        }
-        outputs = {
-            'loss': loss,
-            'log_vars': stats,
-            'num_samples': out.size(1)
-        }
+        stats = {'loss': loss.item()}
+        outputs = {'loss': loss, 'log_vars': stats, 'num_samples': out.size(1)}
 
         # loss.backward()
         # optimizer.step()
@@ -77,26 +70,26 @@ class Bailando(nn.Module):
     def val_step(self, data, optimizer, **kwargs):
         return self.test_step(data, optimizer, **kwargs)
 
-    
     def test_step(self, data, optimizer, **kwargs):
         test_phase = self.bailando_phase
 
         music_seq, pose_seq = data['music'], data['dance']
         self.eval()
-        
+
         results = []
 
         pose_seq[:, :, :3] = 0
         with torch.no_grad():
             if test_phase == 'motion vqvae':
-                
+
                 # print(pose_seq[0, 7, 6], )
                 pose_seq[:, :, :3] = 0
                 pose_seq_out, _, _ = self.vqvae(pose_seq, test_phase)
-                results.append(pose_seq_out) 
+                results.append(pose_seq_out)
 
             elif test_phase == 'global velocity':
-                pose_seq[:, :-1, :3] = pose_seq[:, 1:, :3] - pose_seq[:, :-1, :3]
+                pose_seq[:, :-1, :3] = pose_seq[:,
+                                                1:, :3] - pose_seq[:, :-1, :3]
                 pose_seq[:, -1, :3] = pose_seq[:, -2, :3]
                 pose_seq = pose_seq.clone().detach()
 
@@ -105,15 +98,19 @@ class Bailando(nn.Module):
                 global_vel = pose_seq_out[:, :, :3].clone()
                 pose_seq_out[:, 0, :3] = 0
                 for iii in range(1, pose_seq_out.size(1)):
-                    pose_seq_out[:, iii, :3] = pose_seq_out[:, iii-1, :3] + global_vel[:, iii-1, :]
-                results.append(pose_seq_out) 
+                    pose_seq_out[:, iii, :
+                                 3] = pose_seq_out[:, iii -
+                                                   1, :3] + global_vel[:, iii -
+                                                                       1, :]
+                results.append(pose_seq_out)
 
             elif test_phase == 'gpt':
                 pose_seq[:, :, :3] = 0
                 quants = self.vqvae.encode(pose_seq)
 
                 if isinstance(quants, tuple):
-                    x = tuple(quants[i][0][:, :1].clone() for i in range(len(quants)))
+                    x = tuple(quants[i][0][:, :1].clone()
+                              for i in range(len(quants)))
                 else:
                     x = quants[0][:, :1].clone()
 
@@ -124,13 +121,15 @@ class Bailando(nn.Module):
                 global_vel = pose_sample[:, :, :3].clone()
                 pose_sample[:, 0, :3] = 0
                 for iii in range(1, pose_sample.size(1)):
-                    pose_sample[:, iii, :3] = pose_sample[:, iii-1, :3] + global_vel[:, iii-1, :]
+                    pose_sample[:,
+                                iii, :3] = pose_sample[:, iii - 1, :
+                                                       3] + global_vel[:, iii -
+                                                                       1, :]
 
                 results.append(pose_sample)
             else:
                 raise NotImplementedError
 
-        
         # self.val_results.update({data['file_names'][0]: results[0]})
         outputs = {
             'output_pose': results[0],
@@ -138,7 +137,3 @@ class Bailando(nn.Module):
         }
 
         return outputs
-
-
-    
-

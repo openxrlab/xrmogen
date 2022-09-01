@@ -1,12 +1,9 @@
-import warnings
-
 import torch
-from mmcv.parallel import MMDataParallel, MMDistributedDataParallel, collate
-from mmcv.runner import EpochBasedRunner, get_dist_info, init_dist
+from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
+from mmcv.runner import init_dist
 
 from xrmogen.models.builder import build_dance_models
 from xrmogen.utils import get_root_logger
-
 from .helper import build_dataloader, get_runner, register_hooks
 
 
@@ -16,8 +13,10 @@ def test_mogen(cfg):
     Args:
         cfg (dict): The config dict for test, the same config as train.
         the difference between test and val is:
-                    in test phase, use 'EpochBasedRunner' to influence all testset, in one iter
-                    in val phase, use 'IterBasedRunner' to influence 1/N testset, in one epoch (several iters)
+                    in test phase, use 'EpochBasedRunner'
+                    to influence all testset, in one iter
+                    in val phase, use 'IterBasedRunner'
+                    to influence 1/N testset, in one epoch (several iters)
     """
     cfg.workflow = [('val', 1)]  # only run val_step one epoch
 
@@ -40,10 +39,11 @@ def test_mogen(cfg):
         network = MMDataParallel(network.cuda(), device_ids=[0])
 
     Runner = get_runner(cfg.test_runner)
-    runner = Runner(network,
-                    work_dir=cfg.work_dir,
-                    logger=get_root_logger(log_level=cfg.log_level),
-                    meta=None)
+    runner = Runner(
+        network,
+        work_dir=cfg.work_dir,
+        logger=get_root_logger(log_level=cfg.log_level),
+        meta=None)
     runner.timestamp = cfg.get('timestamp', None)
     register_hooks(cfg.test_hooks, **locals())
 

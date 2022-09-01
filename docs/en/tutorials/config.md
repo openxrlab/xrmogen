@@ -1,7 +1,7 @@
 # Tutorial 1: How to write a config file
 
 
-In XRMoGen, configuration (config) files are implemented in python. 
+In XRMoGen, configuration (config) files are implemented in python.
 A config file contains the configuration required for all experiments, including training and testing pipelines, model, dataset, and other hyperparameters.
 All configuration files provided by XRMoGen are under the `$PROJECT/configs` folder.
 
@@ -48,7 +48,7 @@ Let's take the training config of the Bailando model as an example:
     ```
 
     Under the mmcv framework, IOs of training and test, like transmitting information to the model outside the standard dataloader, or storing network results,  need to be implemented through hooks.
-    Required hooks are decalared in config
+    Required hooks are declared in config
 
     ```python
     train_hooks = [
@@ -89,7 +89,7 @@ Let's take the training config of the Bailando model as an example:
         type='Bailando',
         model_config=dict(
             bailando_phase='motion vqvae',
-            vqvae=dict( 
+            vqvae=dict(
                 up_half=dict(
                     levels=1,
                     downs_t=[3,],
@@ -155,7 +155,7 @@ Let's take the training config of the Bailando model as an example:
                     n_head=12,
                     n_embd=768,
                     vocab_size_up=512,
-                    vocab_size_down=512 
+                    vocab_size_down=512
                 ),
                 n_music=438,
                 n_music_emb=768
@@ -164,10 +164,10 @@ Let's take the training config of the Bailando model as an example:
     )
     ```
 
-* Data:    
+* Data:  
     The data part defines the data set type, data processing flow, batch size and other information.
-    ```python    
-    traindata_cfg = dict( 
+    ```python  
+    traindata_cfg = dict(
         data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_train_wav',
         rotmat=False,
         seq_len=240,
@@ -177,7 +177,7 @@ Let's take the training config of the Bailando model as an example:
         external_wav_rate=8
     )
 
-    testdata_cfg = dict( 
+    testdata_cfg = dict(
         data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_test_full_wav',
         rotmat=False,
         mode='test',

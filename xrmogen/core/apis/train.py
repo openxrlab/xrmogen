@@ -1,13 +1,10 @@
 import os
-import warnings
-
 import torch
-from mmcv.parallel import MMDataParallel, MMDistributedDataParallel, collate
-from mmcv.runner import EpochBasedRunner, get_dist_info, init_dist
+from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
+from mmcv.runner import init_dist
 
 from xrmogen.models.builder import build_dance_models
 from xrmogen.utils import get_root_logger
-
 from .helper import build_dataloader, get_optimizer, get_runner, register_hooks
 
 
@@ -20,10 +17,9 @@ def train_mogen(cfg):
     1. build dataloader
     2. optimizer
     3. build model
-    4. build runnder 
+    4. build runnder
     """
 
-    
     train_loader, trainset = build_dataloader(cfg, mode='train')
     val_loader, valset = build_dataloader(cfg, mode='val')
     dataloaders = [train_loader, val_loader]
@@ -45,14 +41,14 @@ def train_mogen(cfg):
         network = MMDataParallel(network.cuda(), device_ids=[0])
 
     Runner = get_runner(cfg.train_runner)
-    runner = Runner(network,
-                    optimizer=optimizer,
-                    work_dir=cfg.work_dir,
-                    logger=get_root_logger(log_level=cfg.log_level),
-                    meta=None)
+    runner = Runner(
+        network,
+        optimizer=optimizer,
+        work_dir=cfg.work_dir,
+        logger=get_root_logger(log_level=cfg.log_level),
+        meta=None)
 
     runner.timestamp = cfg.get('timestamp', None)
-
 
     # register hooks
     print('register hooks...', flush=True)

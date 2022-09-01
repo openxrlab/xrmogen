@@ -75,7 +75,7 @@ xrmogen
 
         def __init__(self, model_config):
             super().__init__()
-        
+
         def forward(self, ...):
             ....
 
@@ -121,7 +121,7 @@ XRMoGen 使用 `mmcv.runner.EpochBasedRunner` （以epoch为单位）去训练�
 比如，为了训练Bailando模型 (Motion VQVAE phase)，运行以下命令
 
 ```shell
-python main.py --config configs/config/bailando_motion_vqvae.py 
+python main.py --config configs/config/bailando_motion_vqvae.py
 ```
 
 参数:

@@ -85,7 +85,7 @@ XRMoGen 提供的所有配置文件都放置在 `$PROJECT/configs` 文件夹下�
         type='Bailando',
         model_config=dict(
             bailando_phase='motion vqvae',
-            vqvae=dict( 
+            vqvae=dict(
                 up_half=dict(
                     levels=1,
                     downs_t=[3,],
@@ -151,7 +151,7 @@ XRMoGen 提供的所有配置文件都放置在 `$PROJECT/configs` 文件夹下�
                     n_head=12,
                     n_embd=768,
                     vocab_size_up=512,
-                    vocab_size_down=512 
+                    vocab_size_down=512
                 ),
                 n_music=438,
                 n_music_emb=768
@@ -162,8 +162,8 @@ XRMoGen 提供的所有配置文件都放置在 `$PROJECT/configs` 文件夹下�
 
 * 数据
     数据部分的配置信息，定义了数据集类型，数据的处理流程，batchsize等等信息。
-    ```python    
-    traindata_cfg = dict( 
+    ```python  
+    traindata_cfg = dict(
         data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_train_wav',
         rotmat=False,
         seq_len=240,
@@ -173,7 +173,7 @@ XRMoGen 提供的所有配置文件都放置在 `$PROJECT/configs` 文件夹下�
         external_wav_rate=8
     )
 
-    testdata_cfg = dict( 
+    testdata_cfg = dict(
         data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_test_full_wav',
         rotmat=False,
         mode='test',

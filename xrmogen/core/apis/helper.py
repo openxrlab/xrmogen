@@ -1,36 +1,30 @@
 import argparse
 import importlib
-import warnings
-from functools import partial, reduce
-
-import torch
-from mmcv import Config
-from mmcv.parallel import MMDataParallel, MMDistributedDataParallel, collate
-from mmcv.runner import (DistSamplerSeedHook, IterBasedRunner, OptimizerHook,
-                         build_optimizer, get_dist_info)
+from mmcv.runner import build_optimizer, get_dist_info
 from torch.utils.data import DataLoader, RandomSampler
 
 from xrmogen.datasets import DistributedSampler, build_dataset
 
-__all__ = ['parse_args', 'build_dataloader', 'get_optimizer', 'register_hooks', \
-            'get_runner']
+__all__ = [
+    'parse_args', 'build_dataloader', 'get_optimizer', 'register_hooks',
+    'get_runner'
+]
 
 
 def parse_args():
     parser = argparse.ArgumentParser(description='train a nerf')
-    parser.add_argument('--config',
-                        help='train config file path',
-                        default='configs/nerfs/nerf_base01.py')
-    parser.add_argument('--dataname',
-                        help='data name in dataset',
-                        default='ficus')
-    parser.add_argument('--test_only',
-                        help='set to influence on testset once',
-                        action='store_true')
+    parser.add_argument(
+        '--config',
+        help='train config file path',
+        default='configs/nerfs/nerf_base01.py')
+    parser.add_argument(
+        '--dataname', help='data name in dataset', default='ficus')
+    parser.add_argument(
+        '--test_only',
+        help='set to influence on testset once',
+        action='store_true')
     args = parser.parse_args()
     return args
-
-
 
 
 def build_dataloader(cfg, mode='train'):
@@ -48,13 +42,14 @@ def build_dataloader(cfg, mode='train'):
     bs_per_gpu = loader_cfg['batch_size']  # 分到每个gpu的bs数
     bs_all_gpus = bs_per_gpu * num_gpus  # 总的bs数
 
-    data_loader = DataLoader(dataset,
-                             batch_size=bs_all_gpus,
-                             sampler=sampler,
-                             num_workers=num_workers,
-                            #  collate_fn=partial(collate,
-                            #                     samples_per_gpu=bs_per_gpu),
-                             shuffle=False)
+    data_loader = DataLoader(
+        dataset,
+        batch_size=bs_all_gpus,
+        sampler=sampler,
+        num_workers=num_workers,
+        #  collate_fn=partial(collate,
+        #                     samples_per_gpu=bs_per_gpu),
+        shuffle=False)
 
     return data_loader, dataset
 
@@ -65,6 +60,7 @@ def get_optimizer(model, cfg):
 
 
 def register_hooks(hook_cfgs, **variables):
+
     def get_variates(hook_cfg):
         variates = {}
         if 'variables' in hook_cfg:

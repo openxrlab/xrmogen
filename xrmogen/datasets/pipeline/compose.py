@@ -1,9 +1,8 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-from collections.abc import Sequence
-
 import mmcv
 import numpy as np
 import torch
+from collections.abc import Sequence
 from mmcv.utils import build_from_cfg
 
 from ..builder import PIPELINES
@@ -17,6 +16,7 @@ class Compose:
         transforms (list[dict | callable]):
             Either config dicts of transforms or transform objects.
     """
+
     def __init__(self, transforms):
         assert isinstance(transforms, Sequence)
         self.transforms = []
@@ -80,6 +80,7 @@ class ToTensor:
     Args:
         keys (Sequence[str]): Required keys to be converted.
     """
+
     def __init__(self, keys, **kwargs):
         self.keys = keys
         self.kwargs = kwargs

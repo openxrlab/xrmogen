@@ -78,7 +78,7 @@ xrmogen
 
         def __init__(self, model_config):
             super().__init__()
-        
+
         def forward(self, ...):
             ....
 
@@ -124,7 +124,7 @@ XRMoGen 使用 `mmcv.runner.EpochBasedRunner` （以epoch为单位）去训练�
 比如，为了训练DanceRevolution模型，运行以下命令
 
 ```shell
-python main.py --config configs/dance_rev.py 
+python main.py --config configs/dance_rev.py
 ```
 
 参数:
@@ -189,5 +189,3 @@ XRMoGen 是一款由学校和公司共同贡献的开源项目。我们感谢所
 - [XRMoCap](https://github.com/openxrlab/xrmocap): OpenXRLab Multi-view Motion Capture Toolbox and Benchmark.
 - [XRMoGen](https://github.com/openxrlab/xrmogen): OpenXRLab Human Motion Generation Toolbox and Benchmark.
 - [XRNeRF](https://github.com/openxrlab/xrnerf): OpenXRLab Neural Radiance Field (NeRF) Toolbox and Benchmark.
-
-
