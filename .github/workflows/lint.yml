@@ -20,11 +20,11 @@ jobs:
           sudo apt-add-repository ppa:brightbox/ruby-ng -y
           sudo apt-get update
           sudo apt-get install -y ruby2.7
-          pip install pre-commit
-          pre-commit install
+          # pip install pre-commit
+          # pre-commit install
       - name: Linting
-        run: pre-commit run --files xrmogen/*
+        # run: pre-commit run --files xrmogen/*
       - name: Check docstring coverage
         run: |
           pip install interrogate
-          interrogate -vinmMI --ignore-init-method --ignore-module --ignore-nested-functions --ignore-regex "__repr__" -f 60 xrmogen/core
+          # interrogate -vinmMI --ignore-init-method --ignore-module --ignore-nested-functions --ignore-regex "__repr__" -f 60 xrmogen/core
