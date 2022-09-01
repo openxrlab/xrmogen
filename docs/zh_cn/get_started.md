@@ -6,17 +6,17 @@
 
 <!-- TOC -->
 
-- [Getting Started](#getting-started)
-  - [Datasets](#datasets)
-  - [Build a Model](#build-a-model)
-    - [XRMoGen Composition](#xrmogen-composition)
-    - [Write a new dance generation model](#write-a-new-dance-generation-model)
-  - [Train a Model](#train-a-model)
-    - [Iteration Controls](#epoch-controls)
-    - [Train](#train)
-    - [Test](#test)
-    - [Visualize](#visualize)
-  - [Tutorials](#tutorials)
+- [上手指南](#上手指南)
+  - [数据集](#数据集)
+  - [构建模型](#构建模型)
+    - [XRMoGen 构成](#xrmogen-构成)
+    - [如何构建新的模型](#如何构建新的模型)
+  - [模型训练](#模型训练)
+    - [Epoch 控制](#epoch-控制)
+    - [训练](#训练)
+    - [测试](#测试)
+    - [可视化](#可视化)
+  - [教程](#教程)
 
 <!-- TOC -->
 
@@ -41,31 +41,30 @@ xrmogen
 ```
 
 
-## Build a Model
+## 构建模型
 
-### XRMoGen Composition
+### XRMoGen 构成
 
-Currently, XRMoGen contains two dance generation algorithms
+目前，XRMoGen中包含以下两种舞蹈生成的方法：
 
 - Bailando: Siyao *et al.*, Bailando: 3D Dance Generation by Actor-Critic GPT with Choreographic Memory, CVPR 2022
 - DanceRevolution: Huang *et al.*, Dance Revolution: Long-Term Dance Generation with Music via Curriculum Learning, ICLR 2021
 
 
-The model structure can be customized through config files.
+模型结构由配置文件（config）来控制。
 
-### Write a new dance generation model
+### 如何构建新的模型
 
-To implement a new method, your model need to contain following functions/medhotds to fit the training/test pipeline:
+要实现新的方法，模型需要包含以下的函数/方法以适应当前的训练/测试流程：
+
+- `train_step()`: 模型训练的正向过程；
+- `val_step()`: 模型测试的正向过程；
+- 将模型注册为一个DANCE_MODELS
 
 
-- `train_step()`: forward method of the training mode.
-- `val_step()`: forward method of the testing mode.
-- regestered as a dance model
+具体来说，如果我们想实现一个新模型，有几件事要做：
 
-
-To be specific, if we want to implement a new model, there are several things to do.
-
-1. create a new file in `mogen/models/dance_models/my_model.py`.
+1. 在`mogen/models/dance_models/`下创建一个新模型`my_model.py`：
 
     ```python
     from ..builder import NETWORKS
@@ -87,13 +86,13 @@ To be specific, if we want to implement a new model, there are several things to
             ....
     ```
 
-2. Import the model in `mogen/models/__init__.py`
+2. 在`mogen/models/__init__.py`中导入新模型：
 
     ```python
     from .my_model import MyDanceModel
     ```
 
-3. write a config file that defines the model as
+3. 将新模型的构建参数写进需要的config文件：
 
 
     ```python
@@ -104,53 +103,53 @@ To be specific, if we want to implement a new model, there are several things to
 
 
 
-## Train a Model
+## 模型训练
 
-### Epoch Controls
+### Epoch 控制
 
-XRMoGen uses `mmcv.runner.EpochBasedRunner` to control training and test.
+XRMoGen 使用 `mmcv.runner.EpochBasedRunner` （以epoch为单位）去训练和测试模型.
 
-In the training mode, the `max_epochs` in config file decide how many epochs to train. 
-In test mode, `max_epochs` is forced to change to 1, which represents only 1 epoch to test.
+在训练模式下， config文件中的 `max_epochs` 参数决定了模型被训练多少epoch。
+在测试模式下, `max_epochs` 被强制设置为1，即将测试数据测试一遍。
 
-Validation frequency is set as `workflow` of config file:
+训练、测试交替的频率在config文件中的 `workflow` 设定:
 ```python
  workflow = [('train', 20), ('val', 1)]
 ```
 
-### Train
-For example, to train Bailando (Motion VQVAE phase),
+### 训练
+比如，为了训练Bailando模型 (Motion VQVAE phase)，运行以下命令
 
 ```shell
 python main.py --config configs/config/bailando_motion_vqvae.py 
 ```
 
-Arguments are:
-- `--config`: config file path.
+参数:
+- `--config`: config 文件路径
 
 
-### Test
-To test relevant model, add `--test_only` tag after the config path:
+### 测试
+测试相应的模型，只需要在config路径后添加 `--test_only`:
 
 ```shell
 python main.py --config configs/config/bailando_motion_vqvae.py --test_only
 ```
 
-To Compute the quantitative scores:
+对生成的舞蹈动作计算量化指标：
 ```python
-python tools/eval_quantitative_scores.py --pkl_root [GENERATED_DANCE_PKL_ROOT] --gt_root [GROUND_TRUTH_FEATURES=data/aist_features_zero_start] --music_feature_root [MUSIC_FEATURE_ROOT=aistpp_test_full_wav]
+python tools/eval_quantitative_scores.py --pkl_root [生成的动作PKL文件夹] --gt_root data/aist_features_zero_start --music_feature_root data/aistpp_test_full_wav
 
 ```
 
-### Visualize
+### 可视化
 
 ```python
-python tools/visualize_dance_from_pkl.py --pkl_root [GENERATED_DANCE_PKL_ROOT] --audio_path data/musics/
+python tools/visualize_dance_from_pkl.py --pkl_root [生成的动作PKL文件夹] --audio_path data/musics/
 ```
 
 
-## Tutorials
-Currently, we provide some tutorials for users to learn about
+## 教程
+目前我们提供以下教程
 * [configs](tutorials/config.md)
 * [data pipeline](tutorials/data_pipeline.md)
 * [model](tutorials/model.md)

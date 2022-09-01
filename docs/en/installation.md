@@ -11,7 +11,9 @@ We provide some tips for XRMoGen installation in this file.
   - [Prepare environment](#prepare-environment)
       - [a. Create a conda virtual environment and activate it.](#a-create-a-conda-virtual-environment-and-activate-it)
       - [b. Install PyTorch and torchvision](#b-install-pytorch-and-torchvision)
-      - [c. Install Other Needed Python Packages](#c-install-other-needed-python-packages)
+      
+      - [c. Install MMHuman3D](#c-install-mmhuman3d)
+      - [d. Install Other Needed Python Packages](#d-install-other-needed-python-packages)
   - [Another option: Docker Image](#another-option-docker-image)
 
 
@@ -47,17 +49,33 @@ sudo apt install libgl-dev freeglut3-dev build-essential git ninja-build ffmpeg 
 #### a. Create a conda virtual environment and activate it.
 
 ```shell
-conda create -n xrnerf python=3.7 -y
-conda activate xrnerf
+conda create -n xrmogen python=3.8 -y
+conda activate xrmogen
+conda install ffmpeg -y
 ```
 
 #### b. Install PyTorch and torchvision
 
 1. Check the version of pytorch-cuda，and select a suitable on at [here](https://pytorch.org/get-started/previous-versions/) 
-2. Use the  `conda install` command for corresponding version to install PyTorch and Torchvision。
+2. Use the  `conda install` command for corresponding version to install PyTorch and Torchvision.
 
-#### c.  Install Other Needed Python Packages
-* ```pip install -r requirements.txt```
+```
+conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=10.1 -c pytorch
+```
+
+#### c. Install MMHuman3D
+```
+mkdir ./workspace && cd ./workspace
+git clone https://github.com/open-mmlab/mmhuman3d.git
+cd mmhuman3d && pip install -e .
+cd ../..
+```
+
+#### d.  Install Other Needed Python Packages
+```
+pip install -r requirements.txt
+pip install -e .
+```
 <!-- * 根据[官方说明](https://mmcv.readthedocs.io/en/latest/get_started/installation.html)，安装 ```mmcv-full```
 * 安装 ```spconv```, 比如 ```pip install spconv-cu111```. 值得注意的是只有部分cuda版本是支持的, 具体请查看 [官方说明](https://github.com/traveller59/spconv)
 * 通过 ```pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"``` 安装 ```pytorch3d```

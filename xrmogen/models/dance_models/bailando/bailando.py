@@ -90,6 +90,7 @@ class Bailando(nn.Module):
         with torch.no_grad():
             if test_phase == 'motion vqvae':
                 
+                # print(pose_seq[0, 7, 6], )
                 pose_seq[:, :, :3] = 0
                 pose_seq_out, _, _ = self.vqvae(pose_seq, test_phase)
                 results.append(pose_seq_out) 
@@ -101,37 +102,34 @@ class Bailando(nn.Module):
 
                 pose_seq_out, _, _ = self.vqvae(pose_seq, test_phase)
 
-                n, t, c = pose_seq_out.size()
-                pose_seq_out = pose_seq_out.view(n, t, c//3, 3)
-                global_vel = pose_seq_out[:, :, :1, :].clone()
-                pose_seq_out[:, :, :1, :] = 0
+                global_vel = pose_seq_out[:, :, :3].clone()
+                pose_seq_out[:, 0, :3] = 0
                 for iii in range(1, pose_seq_out.size(1)):
-                    pose_seq_out[:, iii, :, :] = pose_seq_out[:, iii, :, :] + pose_seq_out[:, iii-1, :1, :] + global_vel[:, iii-1, :, :]
-                results.append(pose_seq_out.view(n, t, c)) 
+                    pose_seq_out[:, iii, :3] = pose_seq_out[:, iii-1, :3] + global_vel[:, iii-1, :]
+                results.append(pose_seq_out) 
 
             elif test_phase == 'gpt':
-                
-                quants = self.vqvae.module.encode(pose_seq)
+                pose_seq[:, :, :3] = 0
+                quants = self.vqvae.encode(pose_seq)
 
                 if isinstance(quants, tuple):
                     x = tuple(quants[i][0][:, :1].clone() for i in range(len(quants)))
                 else:
                     x = quants[0][:, :1].clone()
 
-                zs = self.gpt.module.sample(x, cond=music_seq)
+                zs = self.gpt.sample(x, cond=music_seq[:, 1:])
 
-                pose_sample = self.vqvae.module.decode(zs)
-                n, t, c = pose_sample.size()
-                pose_sample = pose_sample.view(n, t, c//3, 3)
+                pose_sample = self.vqvae.decode(zs)
 
-                global_vel = pose_sample[:, :, :1, :].clone()
-                pose_sample[:, :, :1, :] = 0
+                global_vel = pose_sample[:, :, :3].clone()
+                pose_sample[:, 0, :3] = 0
                 for iii in range(1, pose_sample.size(1)):
-                    pose_sample[:, iii, :, :] = pose_sample[:, iii, :, :] + pose_sample[:, iii-1, :1, :] + global_vel[:, iii-1, :1, :]
+                    pose_sample[:, iii, :3] = pose_sample[:, iii-1, :3] + global_vel[:, iii-1, :]
 
-                results.append(pose_sample.view(n, t, c))
+                results.append(pose_sample)
             else:
                 raise NotImplementedError
+
         
         # self.val_results.update({data['file_names'][0]: results[0]})
         outputs = {

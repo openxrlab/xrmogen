@@ -4,5 +4,6 @@ numpy
 opencv_python 
 Pillow 
 scipy 
+xrprimer
 tqdm
-git+https://github.com/open-mmlab/mmhuman3d.git
+

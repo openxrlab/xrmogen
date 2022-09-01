@@ -2,22 +2,20 @@ from email import policy
 import os
 from datetime import datetime
 
-
-
 num_gpus = 1
 
 ## optimizer
 method = 'bailando'
-phase = 'motion vqvae'
+phase = 'gpt'
 
 # optimizer
-optimizer = dict(type='Adam', lr=3e-5, betas=[0.5, 0.999])
+optimizer = dict(type='Adam', lr=3e-4, betas=[0.5, 0.999])
 optimizer_config = dict(grad_clip=None)
 
-lr_rate = 3e-5
+lr_rate = 3e-4
 max_epochs = 500
 evalute_config = dict()
-lr_config = dict(policy='step', step=[100, 200], gamma=0.1, by_epoch=True)
+lr_config = dict(policy='step', step=[250, 400], gamma=0.1)
 checkpoint_config = dict(interval=20, by_epoch=True)
 log_level = 'INFO'
 log_config = dict(interval=10,  by_epoch=False, hooks=[dict(type='TextLoggerHook')])
@@ -41,29 +39,31 @@ test_runner = dict(type='DanceTestRunner')
 
 # runtime settings
 num_gpus = 1
-distributed = 0  # 是否多卡，mmcv对dp多卡支持不好，故而要么单卡要么ddp多卡
-work_dir = './bailando-vqvae/'.format(phase)  # noqa
+distributed = 0  # multi-gpu
+work_dir = './bailando_test/'.format(phase)  # noqa
 timestamp = datetime.now().strftime("%d-%b-%H-%M")
 
+
+load_from = os.path.join('./example/bailando.pth')
 
 ## dataset
 
 traindata_cfg = dict( 
-    data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_train_wav',
+    data_dir='data/aistpp_train_wav',
     rotmat=False,
     seq_len=240,
     mode='train',
     move=8,
-    external_wav='/mnt/lustre/syli/dance/Bailando/data/aistpp_music_feat_7.5fps',
+    external_wav='data/aistpp_music_feat_7.5fps',
     external_wav_rate=8
 )
 
 testdata_cfg = dict( 
-    data_dir='/mnt/lustre/syli/dance/Bailando/data/aistpp_test_full_wav',
+    data_dir='data/aistpp_test_full_wav',
     rotmat=False,
     mode='test',
     move=8,
-    external_wav='/mnt/lustre/syli/dance/Bailando/data/aistpp_music_feat_7.5fps',
+    external_wav='data/aistpp_music_feat_7.5fps',
     external_wav_rate=8
 )
 
@@ -75,33 +75,33 @@ test_pipeline = [
 ]
 
 data = dict(
-    train_loader=dict(batch_size=32, num_workers=8),
+    train_loader=dict(batch_size=32, num_workers=0),
     train=dict(
         type='AISTppDataset',
         data_config=traindata_cfg,
         pipeline=train_pipeline,
     ),
-    val_loader=dict(batch_size=1, num_workers=8),
+    val_loader=dict(batch_size=1, num_workers=0),
     val=dict(
         type='AISTppDataset',
         data_config=testdata_cfg,
         pipeline=test_pipeline,
     ),
-    test_loader=dict(batch_size=1, num_workers=8),
+    test_loader=dict(batch_size=1, num_workers=0),
     test=dict(
         type='AISTppDataset',
         data_config=testdata_cfg,
         pipeline=test_pipeline,
     ),
 )
-load_from = os.path.join(work_dir, 'latest.pth')
+
 
 ##### model
 
 model = dict(
     type='Bailando',
     model_config=dict(
-        bailando_phase='motion vqvae',
+        bailando_phase='gpt',
         vqvae=dict( 
             up_half=dict(
                 levels=1,
@@ -119,8 +119,6 @@ model = dict(
                 sample_length=240,
                 use_bottleneck=True,
                 joint_channel=3,
-                acc=1.0,
-                vel=1.0,
                 vqvae_reverse_decoder_dilation=True
             ),
             down_half=dict(
@@ -139,8 +137,6 @@ model = dict(
                 sample_length=240,
                 use_bottleneck=True,
                 joint_channel=3,
-                acc=1.0,
-                vel=1.0,
                 vqvae_reverse_decoder_dilation=True
             ),
             use_bottleneck=True,

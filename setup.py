@@ -8,7 +8,7 @@ def readme():
 
 
 def get_version():
-    version_file = 'mogen/version.py'
+    version_file = 'xrmogen/version.py'
     with open(version_file, 'r', encoding='utf-8') as f:
         exec(compile(f.read(), version_file, 'exec'))
     return locals()['__version__']

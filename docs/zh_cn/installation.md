@@ -9,7 +9,8 @@
   - [准备环境](#准备环境)
       - [a. 创建并激活 conda 虚拟环境.](#a-创建并激活-conda-虚拟环境)
       - [b. 安装 PyTorch 和 torchvision](#b-安装-pytorch-和-torchvision)
-      - [c. 安装其他python包](#c-安装其他python包)
+      - [c. 安装MMHuman3D](#c-安装-mmhuman3d)
+      - [d. 安装其他python包](#d-安装其他python包)
 
   - [利用 Docker 镜像安装 XRMoGen](#利用-docker-镜像安装-xrmogen)
   <!-- - [安装验证](#安装验证) -->
@@ -46,8 +47,9 @@ sudo apt install libgl-dev freeglut3-dev build-essential git ninja-build ffmpeg 
 #### a. 创建并激活 conda 虚拟环境.
 
 ```shell
-conda create -n xrnerf python=3.7 -y
-conda activate xrnerf
+conda create -n xrmogen python=3.8 -y
+conda activate xrmogen
+conda install ffmpeg -y
 ```
 
 #### b. 安装 PyTorch 和 torchvision
@@ -55,8 +57,23 @@ conda activate xrnerf
 1. 查看pytorch-cuda版本匹配表，选择合适的版本 [here](https://pytorch.org/get-started/previous-versions/) 
 2. 用对应`conda install` 命令安装对应版本的PyTorch以及Torchvision。
 
-#### c. 安装其他python包
-* ```pip install -r requirements.txt```
+```
+conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=10.1 -c pytorch
+```
+
+#### c. 安装 MMHuman3D
+```
+mkdir ./workspace && cd ./workspace
+git clone https://github.com/open-mmlab/mmhuman3d.git
+cd mmhuman3d && pip install -e .
+cd ../..
+```
+
+#### d. 安装其他python包
+```
+pip install -r requirements.txt
+pip install -e .
+```
 <!-- * 根据[官方说明](https://mmcv.readthedocs.io/en/latest/get_started/installation.html)，安装 ```mmcv-full```
 * 安装 ```spconv```, 比如 ```pip install spconv-cu111```. 值得注意的是只有部分cuda版本是支持的, 具体请查看 [官方说明](https://github.com/traveller59/spconv)
 * 通过 ```pip install "git+https://github.com/facebookresearch/pytorch3d.git@stable"``` 安装 ```pytorch3d```
@@ -65,6 +82,7 @@ conda activate xrnerf
   
 <!-- #### e. 安装cuda扩展
 * 为了支持instant-ngp算法，需要编译安装cuda扩展 ```raymarch```, 查看[具体教程](../../extensions/ngp_raymarch/README.md) -->
+
 
 
 ## 利用 Docker 镜像安装 XRMoGen

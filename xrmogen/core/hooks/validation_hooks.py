@@ -41,13 +41,16 @@ class SaveDancePKLHook(Hook):
 
             print(len(self.dance_results), flush=True)
 
-
             store_dir = os.path.join(runner.work_dir, self.save_folder, 'epoch' + str(cur_epoch))
             os.makedirs(store_dir, exist_ok=True)
-
             for key in self.dance_results:
-                mmcv.dump(self.dance_results[key].cpu().data.numpy(), os.path.join(store_dir, key + '.pkl'))
+                np_dance = self.dance_results[key].cpu().data.numpy()[0]
+                root = np_dance[:, :3]
+                np_dance = np_dance + np.tile(root, (1, 24))
+                np_dance[:, :3] = root
+                mmcv.dump(np_dance[None], os.path.join(store_dir, key + '.pkl'))
 
+            # need to manually add 1 here 
 
 
 @HOOKS.register_module()

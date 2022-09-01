@@ -1,6 +1,6 @@
 # Copyright (c)
 
-__version__ = '0.1.0'
+__version__ = '0.4.0'
 
 
 def parse_version_info(version_str):
