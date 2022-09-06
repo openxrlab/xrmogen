@@ -4,7 +4,7 @@ The license of our codebase is Apache-2.0. Note that this license only applies t
 
 ## Bailando
 
-S-Lab License 1.0
+S-Lab License 1.0  
 
 Copyright 2022 S-Lab
 
@@ -18,12 +18,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ## Jukebox 
 
-Noncommercial Use License
+Noncommercial Use License  
 
 Software Copyright (c) 2020 OpenAI
 
-We don’t claim ownership of the content you create with Jukebox.
-We only ask that you use Jukebox responsibly and clearly indicate your content was created using OpenAI’s Jukebox.
+We don’t claim ownership of the content you create with Jukebox. We only ask that you use Jukebox responsibly and clearly indicate your content was created using OpenAI’s Jukebox.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software, including without limitation the rights to use, copy, modify, merge, publish, distribute, and/or sublicense copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -37,7 +36,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Fairmotion 
 
-BSD License
+BSD License  
 
 For fairmotion software
 
