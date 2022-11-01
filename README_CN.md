@@ -1,4 +1,11 @@
-# XRMoGen
+<br/>
+
+<div align="center">
+    <img src="resources/xrmogen-logo.png" width="600"/>
+</div>
+
+<br/>
+
 
 ## 介绍
 
@@ -157,12 +164,16 @@ python tools/visualize_dance_from_pkl.py --pkl_root ./bailando_test/test/epoch0 
 
 
 ## 教程
+
 目前我们提供以下教程
 * [configs](tutorials/config.md)
 * [data pipeline](tutorials/data_pipeline.md)
 * [model](tutorials/model.md)
 
 
+## 许可
+
+我们代码库的许可证是Apache-2.0。请注意，此许可仅适用于我们库中的代码，其依赖项是单独许可的。我们向我们所依赖的开源实现致敬。请注意，使用依赖项的内容可能会影响我们代码库的许可。请参阅[许可证](LICENSE)以查看完整许可证。
 
 
 ## 引用
@@ -176,9 +187,15 @@ python tools/visualize_dance_from_pkl.py --pkl_root ./bailando_test/test/epoch0 
 }
 ```
 
+## 参与贡献
+
+我们非常欢迎用户对于 XRMoGen 做出的任何贡献，可以参考 [CONTRIBUTION.md](.github/CONTRIBUTING.md) 文件了解更多细节。
+
+
 ## 致谢
 XRMoGen 是一款由学校和公司共同贡献的开源项目。我们感谢所有为项目提供算法复现和新功能支持的贡献者，以及提供宝贵反馈的用户。
 我们希望该工具箱和基准测试可以为社区提供灵活的代码工具，供用户复现现有算法并开发自己的新模型，从而不断为开源社区提供贡献。
+
 
 ## OpenXRLab中的其他项目
 

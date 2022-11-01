@@ -178,6 +178,10 @@ Except for that，The document also includes the following
 * [installation](docs/en/installation.md)
 
 
+## License
+
+The license of our codebase is Apache-2.0. Note that this license only applies to code in our library, the dependencies of which are separate and individually licensed. We would like to pay tribute to open-source implementations to which we rely on. Please be aware that using the content of dependencies may affect the license of our codebase. Refer to [LICENSE](LICENSE) to view the full license.
+
 
 ## Citation
 
@@ -191,6 +195,10 @@ If you find this project useful in your research, please consider cite:
     year={2022}
 }
 ```
+
+## Contributing
+
+We appreciate all contributions to improve XRMoGen. Please refer to [CONTRIBUTING.md](.github/CONTRIBUTING.md) for the contributing guideline.
 
 
 ## Acknowledgement
