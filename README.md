@@ -1,4 +1,11 @@
-# XRMoGen
+<br/>
+
+<div align="center">
+    <img src="resources/xrmogen-logo.png" width="600"/>
+</div>
+
+<br/>
+
 
 ## Introduction
 
