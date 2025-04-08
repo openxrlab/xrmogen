@@ -13,7 +13,7 @@
 
 ## 获取数据
 
-mogen舞蹈生成任务中采用的数据集是AIST++。包含[原始音乐](https://aistdancedb.ongaaccel.jp/database_download/)，和[动作标注](https://google.github.io/aistplusplus_dataset/download.html)。在xrmogen中，我们提供抽取的音乐特征(438维）以及基于smpl模型提取的人体关键点三维坐标（[此处](https://openxrlab-share-mainland.oss-cn-hangzhou.aliyuncs.com/xrmogen/data.zip)下载）。
+mogen舞蹈生成任务中采用的数据集是AIST++。包含[原始音乐](https://aistdancedb.ongaaccel.jp/database_download/)，和[动作标注](https://google.github.io/aistplusplus_dataset/download.html)。在xrmogen中，我们提供抽取的音乐特征（438维）以及基于smpl模型提取的人体关键点三维坐标（[此处](https://drive.google.com/file/d/133I4HB4JUF_Q9RbyWiveaq4KY6ykODjf/view?usp=sharing)下载）。
 
 
 ## 数据结构
